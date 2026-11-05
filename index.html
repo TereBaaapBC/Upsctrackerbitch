@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>UPSC 360 Command Centre</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: an exam answer-sheet desk. Sticky header + tabs, a D-day hero, then a 2-column work grid that stacks on phones.
+   Ink-blue pen on cool paper, a highlighter for what matters, OMR ovals for mastery stages. */
+:root{
+  --paper:#EEF1F6; --sheet:#FFFFFF; --sheet-2:#E6EAF1; --rule:#D3DAE6;
+  --ink:#141D33; --ink-2:#47536E; --ink-3:#7A86A0;
+  --pen:#2441A6; --pen-soft:rgba(36,65,166,.09); --on-pen:#FFFFFF;
+  --mark:#F4C23E; --mark-soft:rgba(244,194,62,.42);
+  --good:#1D8752; --good-soft:rgba(29,135,82,.12);
+  --warn:#A86A12; --warn-soft:rgba(168,106,18,.12);
+  --bad:#BE3A33; --bad-soft:rgba(190,58,51,.10);
+  --h0:#E1E6EE; --h1:#C5D0F0; --h2:#8FA3E3; --h3:#5470CF; --h4:#2441A6;
+  --shadow:0 1px 2px rgba(20,29,51,.05),0 6px 20px -12px rgba(20,29,51,.18);
+  --slab:#16213D; --on-slab:#EEF1F6;
+  --f-display:'Spectral',Georgia,'Times New Roman',serif;
+  --f-body:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0D1220; --sheet:#151C2E; --sheet-2:#1C2540; --rule:#28324D;
+  --ink:#E5E9F3; --ink-2:#A2ADC6; --ink-3:#6E7A95;
+  --pen:#8EA5FF; --pen-soft:rgba(142,165,255,.13); --on-pen:#0D1220;
+  --mark:#E3B235; --mark-soft:rgba(227,178,53,.26);
+  --good:#4CC38A; --good-soft:rgba(76,195,138,.14);
+  --warn:#E2A84B; --warn-soft:rgba(226,168,75,.14);
+  --bad:#F0716A; --bad-soft:rgba(240,113,106,.13);
+  --h0:#1B233A; --h1:#25356A; --h2:#3A55A8; --h3:#5F7BE0; --h4:#93A9FF;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+  --slab:#1F2C52; --on-slab:#E9EDF7;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#0D1220; --sheet:#151C2E; --sheet-2:#1C2540; --rule:#28324D;
+  --ink:#E5E9F3; --ink-2:#A2ADC6; --ink-3:#6E7A95;
+  --pen:#8EA5FF; --pen-soft:rgba(142,165,255,.13); --on-pen:#0D1220;
+  --mark:#E3B235; --mark-soft:rgba(227,178,53,.26);
+  --good:#4CC38A; --good-soft:rgba(76,195,138,.14);
+  --warn:#E2A84B; --warn-soft:rgba(226,168,75,.14);
+  --bad:#F0716A; --bad-soft:rgba(240,113,106,.13);
+  --h0:#1B233A; --h1:#25356A; --h2:#3A55A8; --h3:#5F7BE0; --h4:#93A9FF;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
+  --slab:#1F2C52; --on-slab:#E9EDF7;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--paper)}
+body{color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--paper)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--pen);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.num,.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h2{font-size:22px;font-weight:600}
+h3{font-size:18px;font-weight:600}
+p{margin:0}
+.muted{color:var(--ink-2)} .faint{color:var(--ink-3)}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.hl{background:linear-gradient(180deg,transparent 58%,var(--mark-soft) 58%,var(--mark-soft) 92%,transparent 92%);padding:0 .08em}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--paper);border-bottom:1px solid var(--rule)}
+.bar{display:flex;align-items:center;gap:12px;padding-block:12px 6px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto;min-width:0}
+.brand b{font-family:var(--f-display);font-size:24px;font-weight:700;letter-spacing:-.01em}
+.brand b i{font-style:normal;color:var(--pen)}
+.brand span{font-size:13px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--ink-2);padding:6px 10px;border-radius:999px;border:1px solid var(--rule);background:var(--sheet)}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--ink-3)}
+.status[data-s="saved"] i{background:var(--good)}
+.status[data-s="saving"] i{background:var(--mark);animation:pulse 1s infinite}
+.status[data-s="error"] i,.status[data-s="unreachable"] i{background:var(--bad)}
+@keyframes pulse{50%{opacity:.35}}
+.minitimer{display:none;align-items:center;gap:6px;font-family:var(--f-mono);font-size:13px;font-weight:600;padding:6px 10px;border-radius:999px;background:var(--pen);color:var(--on-pen);border:0;cursor:pointer}
+.minitimer.on{display:inline-flex}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-inline:-4px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{appearance:none;border:0;background:none;padding:10px 12px 11px;font-weight:600;font-size:14px;color:var(--ink-2);border-bottom:2.5px solid transparent;white-space:nowrap;cursor:pointer;display:flex;gap:7px;align-items:center}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--pen)}
+.tab .tc{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);font-weight:500}
+
+main{padding-block:22px 64px;display:flex;flex-direction:column;gap:20px}
+
+/* generic */
+.card{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);min-width:0}
+.card-h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.card-h > div{min-width:0}
+.card-h p{font-size:13px;color:var(--ink-2);margin-top:3px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.stack{display:flex;flex-direction:column;gap:10px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px;align-items:start}
+.grid3{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:20px;align-items:start}
+@media (max-width:900px){.grid2,.grid3{grid-template-columns:minmax(0,1fr)}}
+.btn{appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);padding:8px 13px;border-radius:9px;font-weight:600;font-size:13.5px;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--pen);border-color:var(--pen);color:var(--on-pen)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.danger{color:var(--bad);border-color:var(--bad-soft);background:var(--bad-soft)}
+.btn.sm{padding:5px 9px;font-size:12.5px;border-radius:8px}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--ink-2)}
+.btn.quiet:hover{background:var(--sheet-2);color:var(--ink)}
+.ib{appearance:none;border:0;background:transparent;color:var(--ink-3);width:30px;height:30px;border-radius:8px;display:inline-grid;place-items:center;cursor:pointer;flex:none}
+.ib:hover{background:var(--sheet-2);color:var(--ink)}
+.ib.del:hover{color:var(--bad);background:var(--bad-soft)}
+.ic{width:16px;height:16px;flex:none}
+.in{width:100%;padding:9px 11px;border-radius:9px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);font-size:14px;min-width:0}
+.in:focus{outline:none;border-color:var(--pen);box-shadow:0 0 0 3px var(--pen-soft)}
+textarea.in{resize:vertical;line-height:1.5}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:600;color:var(--ink-2);min-width:0}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{appearance:none;border:1px solid var(--rule);background:var(--sheet);color:var(--ink-2);padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--pen-soft);color:var(--pen);white-space:nowrap}
+.tag.gold{background:var(--mark-soft);color:var(--ink)}
+.tag.good{background:var(--good-soft);color:var(--good)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.plain{background:var(--sheet-2);color:var(--ink-2)}
+.empty{padding:22px;text-align:center;color:var(--ink-3);font-size:14px;border:1.5px dashed var(--rule);border-radius:10px}
+.search{position:relative;min-width:0;flex:1 1 200px;max-width:320px}
+.search .ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink-3)}
+.search .in{padding-left:32px}
+.bar-track{height:7px;border-radius:99px;background:var(--sheet-2);overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;background:var(--pen);transition:width .5s}
+.bar-fill.good{background:var(--good)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,2fr);gap:20px;align-items:stretch}
+@media (max-width:900px){.hero{grid-template-columns:minmax(0,1fr)}}
+.dday{background:var(--slab);color:var(--on-slab);border-radius:var(--r);padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between;gap:14px;position:relative;overflow:hidden}
+.dday .eyebrow{color:color-mix(in srgb,var(--on-slab) 62%,transparent)}
+.dday .big{font-family:var(--f-display);font-weight:700;font-size:clamp(56px,9vw,84px);line-height:.95;letter-spacing:-.02em}
+.dday .big .hl{background:linear-gradient(180deg,transparent 62%,var(--mark) 62%,var(--mark) 90%,transparent 90%);color:var(--on-slab)}
+.dday .sub{font-size:13.5px;color:color-mix(in srgb,var(--on-slab) 72%,transparent)}
+.dday .sub b{color:var(--on-slab)}
+.dday .lines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,transparent 0 27px,color-mix(in srgb,var(--on-slab) 6%,transparent) 27px 28px)}
+.dday > *{position:relative}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:700px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:14px 15px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);min-width:0;cursor:pointer;text-align:left;appearance:none}
+.kpi:hover{border-color:var(--ink-3)}
+.kpi .v{font-family:var(--f-display);font-size:32px;font-weight:700;line-height:1}
+.kpi .v small{font-family:var(--f-body);font-size:13px;font-weight:600;color:var(--ink-3);margin-left:3px}
+.kpi .d{font-size:12.5px;color:var(--ink-2)}
+.ringrow{display:flex;align-items:center;gap:12px}
+.ring{flex:none}
+.ring circle{fill:none;stroke-width:6}
+.ring .bg{stroke:var(--sheet-2)} .ring .fg{stroke:var(--pen);stroke-linecap:round;transition:stroke-dashoffset .6s}
+.ring.done .fg{stroke:var(--good)}
+
+/* tasks */
+.task{display:flex;align-items:center;gap:10px;padding:9px 8px 9px 10px;border-radius:10px;border:1px solid var(--rule);background:var(--sheet)}
+.task:hover{border-color:var(--ink-3)}
+.task.done{background:var(--paper);border-color:transparent}
+.task.done .tt{text-decoration:line-through;color:var(--ink-3)}
+.task .tt{flex:1;min-width:0;font-size:14.5px;font-weight:500;overflow-wrap:anywhere}
+.chk{appearance:none;width:22px;height:22px;border-radius:7px;border:1.8px solid var(--ink-3);background:transparent;display:grid;place-items:center;cursor:pointer;flex:none;color:var(--on-pen)}
+.chk[aria-checked="true"]{background:var(--good);border-color:var(--good)}
+.chk .ic{width:14px;height:14px;opacity:0}
+.chk[aria-checked="true"] .ic{opacity:1}
+.subhead{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:14px 0 6px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.addrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:8px;margin-bottom:12px}
+@media (max-width:560px){.addrow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}.addrow .in:first-child{grid-column:1/-1}.addrow .btn{grid-column:1/-1}.task{flex-wrap:wrap;row-gap:6px}.task .tt{flex:1 1 calc(100% - 40px)}.task .tt + *{margin-left:32px}}
+
+/* timer */
+.timer{background:var(--slab);color:var(--on-slab);border-radius:10px;padding:18px;text-align:center}
+.timer .clock{font-family:var(--f-mono);font-size:52px;font-weight:600;letter-spacing:.02em;line-height:1.1}
+.timer .lbl{font-size:12.5px;color:color-mix(in srgb,var(--on-slab) 65%,transparent);margin-top:4px}
+.timer .row{justify-content:center;margin-top:14px}
+.timer .btn{background:color-mix(in srgb,var(--on-slab) 10%,transparent);border-color:color-mix(in srgb,var(--on-slab) 18%,transparent);color:var(--on-slab)}
+.timer .btn.go{background:var(--mark);border-color:var(--mark);color:#141D33}
+.presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:12px}
+.presets .btn{padding:7px 4px;font-size:12.5px}
+.presets .btn[aria-pressed="true"]{border-color:var(--pen);color:var(--pen);background:var(--pen-soft)}
+
+/* week bars */
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;align-items:end;height:130px;position:relative;padding-top:6px}
+.wk{display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end;min-width:0}
+.wk .b{width:100%;max-width:34px;border-radius:6px 6px 3px 3px;background:var(--h2);min-height:3px;transition:height .5s}
+.wk.today .b{background:var(--pen)}
+.wk.hit .b{background:var(--good)}
+.wk .l{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.wk .n{font-family:var(--f-mono);font-size:11px;color:var(--ink-2)}
+.target-line{position:absolute;left:0;right:0;border-top:1.5px dashed var(--mark);pointer-events:none}
+.target-line span{position:absolute;right:0;top:-17px;font-size:10.5px;font-weight:700;color:var(--warn);background:var(--sheet);padding:0 4px}
+
+/* tables */
+.tw{overflow-x:auto;margin-inline:-18px;padding-inline:18px}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:760px}
+.t th{text-align:left;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:8px 10px;border-bottom:1.5px solid var(--rule);white-space:nowrap}
+.t td{padding:11px 10px;border-bottom:1px solid var(--rule);vertical-align:middle}
+.t tr:last-child td{border-bottom:0}
+.t tbody tr:hover td{background:color-mix(in srgb,var(--sheet-2) 45%,transparent)}
+.t .paper{font-weight:700;color:var(--pen);white-space:nowrap}
+.t .subj{font-weight:600;white-space:nowrap}
+.t .topic{color:var(--ink-2);min-width:220px}
+.t .r{text-align:right}
+
+/* OMR stage ovals */
+.omr{display:inline-flex;align-items:center;gap:5px}
+.bub{appearance:none;width:24px;height:15px;border-radius:50%;border:1.6px solid var(--ink-3);background:transparent;cursor:pointer;padding:0;position:relative;font-family:var(--f-mono);font-size:8.5px;font-weight:600;color:var(--ink-3);line-height:1}
+.bub:hover{border-color:var(--pen);color:var(--pen)}
+.bub.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.bub.on.full{background:var(--good);border-color:var(--good);color:var(--on-pen)}
+.stl{font-size:12px;font-weight:600;min-width:84px;display:inline-block;margin-left:6px;color:var(--ink-2)}
+.stl.s4{color:var(--good)}
+.stl.s0{color:var(--ink-3)}
+.pyq{display:inline-flex;align-items:center;gap:2px;border:1px solid var(--rule);border-radius:8px;background:var(--paper)}
+.pyq button{appearance:none;border:0;background:none;width:24px;height:26px;cursor:pointer;color:var(--ink-3);font-weight:700}
+.pyq button:hover{color:var(--pen)}
+.pyq span{font-family:var(--f-mono);font-size:12.5px;min-width:46px;text-align:center}
+.paperbars{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.pb{padding:11px 12px;border-radius:10px;background:var(--paper);border:1px solid var(--rule);display:flex;flex-direction:column;gap:7px;cursor:pointer;text-align:left;appearance:none}
+.pb[aria-pressed="true"]{border-color:var(--pen);box-shadow:0 0 0 2px var(--pen-soft)}
+.pb .row{justify-content:space-between}
+.pb b{font-size:13.5px}
+.pb .num{font-size:13px;color:var(--ink-2)}
+.addtopic{display:grid;grid-template-columns:120px minmax(0,1fr) minmax(0,2fr) 90px auto;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--rule)}
+@media (max-width:760px){.addtopic{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.addtopic > :nth-child(3){grid-column:1/-1}}
+
+/* notes */
+.drop{border:1.8px dashed var(--rule);border-radius:12px;padding:22px;text-align:center;cursor:pointer;background:var(--paper);transition:border-color .15s,background .15s}
+.drop:hover,.drop.on{border-color:var(--pen);background:var(--pen-soft)}
+.drop b{display:block;font-size:14.5px}
+.drop span{font-size:12.5px;color:var(--ink-3)}
+.note{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);padding:16px 16px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px;min-width:0}
+.note h4{margin:0;font-family:var(--f-display);font-size:18px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+.note .body{font-size:14px;color:var(--ink-2);white-space:pre-line;overflow-wrap:anywhere}
+.note .body.clamp{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.note .meta{font-size:12px;color:var(--ink-3)}
+.file{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;background:var(--paper);border:1px solid var(--rule)}
+.file .ext{font-family:var(--f-mono);font-size:11px;font-weight:600;padding:3px 6px;border-radius:6px;background:var(--good-soft);color:var(--good)}
+.file .fn{flex:1;min-width:0;font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file a{color:var(--pen);font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap}
+.kw{font-size:11.5px;color:var(--ink-3);font-family:var(--f-mono)}
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+@media (max-width:420px){.notes-grid{grid-template-columns:minmax(0,1fr)}}
+.thinker{padding:14px 14px 12px;border-radius:10px;border:1px solid var(--rule);background:var(--paper);display:flex;flex-direction:column;gap:6px}
+.thinker q{font-family:var(--f-display);font-style:italic;font-size:16px;line-height:1.45;quotes:"\201C" "\201D"}
+
+/* mocks */
+.calc{background:var(--slab);color:var(--on-slab);border-radius:10px;padding:14px 16px}
+.calc .score{font-family:var(--f-mono);font-size:34px;font-weight:600;line-height:1.1}
+.calc .score.safe{color:var(--mark)}
+.calc .small{font-size:12px;color:color-mix(in srgb,var(--on-slab) 65%,transparent)}
+svg.chart text{fill:var(--ink-3);font-family:var(--f-mono);font-size:11px}
+svg.chart .grid{stroke:var(--rule);stroke-width:1}
+svg.chart .cut{stroke:var(--mark);stroke-width:1.5;stroke-dasharray:5 4}
+svg.chart .line{stroke:var(--pen);stroke-width:2.5;fill:none}
+svg.chart .area{fill:var(--pen-soft)}
+svg.chart .pt{fill:var(--sheet);stroke:var(--pen);stroke-width:2}
+svg.chart .pt.last{fill:var(--pen)}
+svg.chart .cutlbl{fill:var(--warn);font-weight:600}
+
+/* log */
+.hm-wrap{overflow-x:auto;padding-bottom:4px}
+.hm{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,14px);grid-auto-columns:14px;gap:3px;width:max-content}
+.hm button{appearance:none;border:0;padding:0;width:14px;height:14px;border-radius:3px;background:var(--h0);cursor:pointer}
+.hm button[data-l="1"]{background:var(--h1)} .hm button[data-l="2"]{background:var(--h2)} .hm button[data-l="3"]{background:var(--h3)} .hm button[data-l="4"]{background:var(--h4)}
+.hm button.today{outline:2px solid var(--mark);outline-offset:1px}
+.hm .pad{visibility:hidden}
+.legend{display:flex;gap:4px;align-items:center;font-size:11.5px;color:var(--ink-3)}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:700px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{padding:12px 14px;border-radius:10px;background:var(--paper);border:1px solid var(--rule)}
+.stat .v{font-family:var(--f-display);font-size:26px;font-weight:700;line-height:1.1}
+.stat .k{font-size:12px;color:var(--ink-2)}
+.dayrow{display:grid;grid-template-columns:96px 70px minmax(0,1fr) auto;gap:12px;align-items:start;padding:11px 0;border-bottom:1px solid var(--rule)}
+.dayrow:last-child{border-bottom:0}
+.dayrow .dt{font-weight:700;font-size:13.5px}
+.dayrow .hrs{font-family:var(--f-mono);font-size:13.5px;color:var(--pen);font-weight:600}
+.dayrow .nt{font-size:13.5px;color:var(--ink-2);white-space:pre-line;overflow-wrap:anywhere}
+@media (max-width:520px){.dayrow{grid-template-columns:auto auto minmax(0,1fr)}.dayrow .nt{grid-column:1/-1;grid-row:2}.dayrow > :last-child{grid-row:1;grid-column:3;justify-self:end}}
+
+/* banner, modal, toast */
+.banner{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:14px 16px;border-radius:var(--r);background:var(--mark-soft);border:1px solid color-mix(in srgb,var(--mark) 55%,transparent)}
+.banner p{font-size:14px;min-width:0;flex:1 1 280px}
+.banner b{font-weight:700}
+.loading{padding:80px 0;text-align:center;color:var(--ink-2)}
+.loading h2{margin-bottom:8px}
+.scrim{position:fixed;inset:0;z-index:60;background:rgba(10,14,26,.5);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.modal{background:var(--sheet);color:var(--ink);border-radius:14px;border:1px solid var(--rule);width:min(560px,100%);max-height:100%;overflow:auto;padding:20px;box-shadow:0 30px 80px -20px rgba(0,0,0,.5)}
+.modal h3{margin-bottom:4px}
+.modal .desc{font-size:13.5px;color:var(--ink-2);margin-bottom:14px}
+.modal form{display:flex;flex-direction:column;gap:12px}
+.modal .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.modal .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;flex-wrap:wrap}
+.modal .acts .left{margin-right:auto}
+.modal hr{border:0;border-top:1px solid var(--rule);margin:6px 0}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);z-index:70;background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:calc(100% - 32px);text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="wrap">
+    <div class="bar">
+      <div class="brand"><b>UPSC <i>360°</i></b><span id="brand-sub">CSE 2027 command centre</span></div>
+      <button class="minitimer" id="minitimer" data-act="tab" data-tab="today" title="Focus timer running">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg><span id="minitime">50:00</span>
+      </button>
+      <span class="status" id="status" data-s="loading" role="status"><i></i><span>Opening your vault…</span></span>
+      <button class="ib" data-act="settings" title="Settings, backup and restore" aria-label="Settings, backup and restore">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </button>
+    </div>
+    <nav class="tabs" id="tabs" role="tablist"></nav>
+  </div>
+</header>
+<main class="wrap" id="main"><div class="loading"><h2>Opening your vault…</h2><p>Loading your saved progress.</p></div></main>
+<div id="modal-root"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="import-file" accept=".json,application/json" class="vh" tabindex="-1">
+<input type="file" id="upload-file" multiple accept=".pdf,.txt,.md,.png,.jpg,.jpeg,.webp,.csv,.json,.doc,.docx" class="vh" tabindex="-1">
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- helpers ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = p => (p||'x') + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const int = (v, d=0) => { const n = parseInt(v, 10); return Number.isFinite(n) ? n : d; };
+const num = (v, d=0) => { const n = parseFloat(v); return Number.isFinite(n) ? n : d; };
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const clone = o => JSON.parse(JSON.stringify(o));
+const dkey = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+const today = () => dkey(new Date());
+const parseKey = k => { const [y,m,d] = String(k).split('-').map(Number); return new Date(y, (m||1)-1, d||1); };
+const addDays = (k, n) => { const d = parseKey(k); d.setDate(d.getDate()+n); return dkey(d); };
+const daysBetween = (a, b) => Math.round((parseKey(b) - parseKey(a)) / 86400000);
+const isKey = k => /^\d{4}-\d{2}-\d{2}$/.test(String(k||''));
+const fmt = (k, o) => parseKey(k).toLocaleDateString('en-IN', o || {day:'numeric', month:'short'});
+const fmtLong = k => parseKey(k).toLocaleDateString('en-IN', {weekday:'short', day:'numeric', month:'short', year:'numeric'});
+const hrs = m => { const h = (m||0)/60; return (Math.round(h*10)/10).toString(); };
+const hm = m => { m = Math.round(m||0); const h = Math.floor(m/60), mm = m%60; return h ? (mm ? h+'h '+mm+'m' : h+'h') : mm+'m'; };
+
+const P = {
+  check:'<path d="M20 6L9 17l-5-5"/>', plus:'<path d="M12 5v14M5 12h14"/>',
+  trash:'<path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>',
+  edit:'<path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  play:'<path d="M6 4l14 8-14 8V4z"/>', pause:'<path d="M7 4h3v16H7zM14 4h3v16h-3z"/>',
+  reset:'<path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8M3 3v5h5"/>',
+  upload:'<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+  download:'<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>', stop:'<rect x="6" y="6" width="12" height="12" rx="1"/>',
+  folder:'<path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>',
+  repeat:'<path d="M17 2l4 4-4 4M3 11V9a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/>'
+};
+const ic = n => '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (P[n]||'') + '</svg>';
+
+/* ---------- reference data ---------- */
+const STAGES = ['Unread','1st reading','Notes ready','Revised 2×','Exam ready'];
+const PAPERS = ['GS-I','GS-II','GS-III','GS-IV','Essay','CSAT'];
+const TAGS = ['GS-I','GS-II','GS-III','GS-IV','Optional','Essay','CSAT','Current Affairs','Prelims MCQ','Answer Writing','Revision'];
+const SOURCES = ['Self Notes','The Hindu','Indian Express','PIB / PRS','Standard Book','Optional Class','Coaching Material','Handwritten','Uploaded File'];
+const NOTE_CATEGORIES = ['GS-I (History, Society, Geo)','GS-II (Polity, Governance, IR)','GS-III (Economy, Env, Security)','GS-IV (Ethics & Case Studies)','Optional Paper-I','Optional Paper-II','Current Affairs & Editorials','Essay & Quotes Fodder','Prelims PYQ & CSAT'];
+const MOCK_TYPES = {
+  GS:   {label:'Prelims GS Paper I', q:100, plus:2,   minus:2/3,   max:200},
+  CSAT: {label:'CSAT Paper II',      q:80,  plus:2.5, minus:2.5/3, max:200}
+};
+const CSAT_QUALIFY = 66.67;
+
+function defaultSyllabus(){ return [
+  ['s1','GS-I','Modern Indian History','Freedom Struggle: 1857 to 1947 & Key Personalities',18],
+  ['s2','GS-I','Art & Culture','Temple Architecture, Classical Dances & Buddhist Art',14],
+  ['s3','GS-I','Geography','Monsoon Mechanism, Ocean Currents & Geomorphology',16],
+  ['s4','GS-II','Indian Polity','Fundamental Rights, Basic Structure & Parliamentary Committees',25],
+  ['s5','GS-II','Governance','e-Governance, Citizen Charters, Social Audit & RTI',11],
+  ['s6','GS-II','International Relations','India-Neighbourhood, Indo-Pacific, G20 & Global South',15],
+  ['s7','GS-III','Indian Economy','Monetary Policy, Fiscal Consolidation, Inclusive Growth & MSP',22],
+  ['s8','GS-III','Environment & Ecology','Biodiversity Hotspots, COP Summits, EIA & Climate Finance',28],
+  ['s9','GS-III','Internal Security','Cyber Security, Left-Wing Extremism & Border Management',10],
+  ['s10','GS-IV','Ethics & Integrity','Foundational Values for Civil Services & Emotional Intelligence',14],
+  ['s11','GS-IV','Case Studies','Administrative Dilemmas, Probity in Governance & Corporate Ethics',12],
+  ['s12','Essay','Philosophical & Socio-Econ','Brainstorming Frameworks, Anecdotes & Multi-Dimensional Flow',20],
+  ['s13','CSAT','Comprehension & Quant','Logical Reasoning, Data Interpretation & Reading Passages',80]
+].map(([id,paper,subject,topic,pyqCount]) => ({id,paper,subject,topic,stage:0,pyqCount,pyqDone:0,lastTouched:null})); }
+
+function defaultOptional(){
+  const o = (id,paper,section,topic,pyqCount) => ({id,paper,section,topic,stage:0,pyqCount,pyqDone:0,lastTouched:null});
+  return {
+    'PSIR (Political Science & IR)':[
+      o('opt1','Paper-I','Part A: Political Theory','Plato, Aristotle, Machiavelli, Hobbes, Locke, Marx & Gramsci',24),
+      o('opt2','Paper-I','Part A: Concepts','Justice (Rawls), Equality, Rights, Democracy & Theories of State',19),
+      o('opt3','Paper-I','Part B: Indian Govt & Politics','Indian Nationalism, Making of Constitution, Caste, Ethnicity & Party System',28),
+      o('opt4','Paper-II','Part A: Comparative & IR Theory','Realism, Liberalism, Constructivism, Geopolitics & UN Reforms',22),
+      o('opt5','Paper-II','Part B: India & the World','India’s Foreign Policy, Non-Alignment, Strategic Autonomy, USA, China & Neighbourhood',30)],
+    'Sociology':[
+      o('soc1','Paper-I','Foundations of Sociology','Karl Marx, Emile Durkheim, Max Weber, Talcott Parsons & R.K. Merton',32),
+      o('soc2','Paper-I','Stratification & Social Change','Social Stratification, Mobility, Work, Economic Life, Religion & Science',25),
+      o('soc3','Paper-II','Indian Society Structure','Perspectives (Indology, Structural Functionalism, Marxist, Subaltern) & Caste System',28),
+      o('soc4','Paper-II','Social Changes in India','Sanskritization, Westernization, Secularization, Agrarian Class & Social Movements',26)],
+    'Anthropology':[
+      o('ant1','Paper-I','Social-Cultural Anthropology','Marriage, Family, Kinship, Economic & Political Organization, Anthropological Theories',26),
+      o('ant2','Paper-I','Biological & Archaeological','Human Evolution, Primatology, Human Genetics, Prehistoric Archaeology',24),
+      o('ant3','Paper-II','Indian Anthropology','Ethnic & Linguistic Elements, Sacred Complex, Nature-Man-Spirit Complex',22),
+      o('ant4','Paper-II','Tribal India','Tribal Problems, PESA, Forest Rights Act, PVTGs & Constitutional Safeguards',30)],
+    'Geography':[
+      o('geo1','Paper-I','Physical Geography','Geomorphology, Climatology, Oceanography, Biogeography & Environmental Geo',28),
+      o('geo2','Paper-I','Human Geography','Perspectives in Human Geography, Economic Geo, Population & Settlement Models',25),
+      o('geo3','Paper-II','Geography of India - Physical','Physiography, Drainage Systems, Indian Monsoon, Soils & Natural Vegetation',24),
+      o('geo4','Paper-II','Resources, Agriculture & Regional','Agro-Climatic Zones, Green Revolution, Industrial Corridors & Regional Planning',26)],
+    'Public Administration':[
+      o('pub1','Paper-I','Administrative Theory','Classical & Human Relations Thinkers (Taylor, Weber, Simon, Mayo, Follett)',27),
+      o('pub2','Paper-I','Public Policy & Accountability','New Public Management, Good Governance, Delegated Legislation & Financial Admin',23),
+      o('pub3','Paper-II','Indian Administration','Kautilya Arthashastra, Mughal & British Legacy, Cabinet Secretariat, PMO & All India Services',29),
+      o('pub4','Paper-II','District & Welfare Admin','Role of District Collector, 73rd & 74th Amendments, ARC Reports & Law and Order',25)],
+    'History':[
+      o('his1','Paper-I','Ancient India','Indus Valley, Vedic Period, Mauryan Empire, Guptas & Map Sites',30),
+      o('his2','Paper-I','Medieval India','Delhi Sultanate, Bhakti & Sufi Movements, Vijayanagara & Mughal Empire',26),
+      o('his3','Paper-II','Modern India','British Expansion, Economic Impact of Colonial Rule, Social Reforms & Freedom Struggle',28),
+      o('his4','Paper-II','World History','Enlightenment, Industrial Revolution, World Wars, Cold War & Decolonization',24)]
+  };
+}
+function defaultCore(){
+  return {
+    v:3,
+    settings:{theme:'system', prelimsDate:'2027-05-23', mainsDate:'2027-08-20', dailyTarget:8, gsCutoff:95, selectedOptional:'PSIR (Political Science & IR)'},
+    syllabus: defaultSyllabus(),
+    optionalData: defaultOptional(),
+    thinkers:[
+      {id:'th1', scholar:'Hannah Arendt', quote:'Power corresponds to the human ability not just to act, but to act in concert.', paper:'Paper-I'},
+      {id:'th2', scholar:'M.N. Srinivas', quote:'Caste is not disappearing in modern India; it is adapting through Sanskritization and secular mobilization.', paper:'Paper-II'}
+    ],
+    mocks:[]
+  };
+}
+function defaultDays(){
+  const t = today();
+  return {
+    v:3, log:{},
+    routine:[{id:'r1', title:'The Hindu & PIB editorial synthesis (45 mins)', tag:'Current Affairs'}],
+    tasks:[
+      {id:'t2', title:'Laxmikanth revision: Emergency & Federalism chapters', tag:'GS-II', done:false, date:t},
+      {id:'t3', title:'Optional Paper-I: 90 mins core thinkers + 2 PYQ answers', tag:'Optional', done:false, date:t},
+      {id:'t4', title:'Solve 50 Prelims PYQs (Environment & Science Tech)', tag:'Prelims MCQ', done:false, date:t},
+      {id:'t5', title:'CSAT: 15 passages + number system practice', tag:'CSAT', done:false, date:t}
+    ]
+  };
+}
+function defaultNotes(){ return [
+  {id:'n1', title:'Sixteenth Finance Commission & Vertical Devolution Debates', category:'GS-II (Polity, Governance, IR)', subFolder:'Fiscal Federalism', source:'The Hindu / PRS', date:'Oct 2026', created:1,
+   content:'Article 280 constitutional mandate. Key tension between equity (income distance) vs efficiency (demographic performance & tax effort). Useful for Federalism & Fiscal Policy questions.', keywords:['Article 280','Fiscal Federalism','Horizontal Equity'], file:null},
+  {id:'n2', title:'Optional Thinker Notes: Gramsci’s Hegemony & Civil Society', category:'Optional Paper-I', subFolder:'Core Thinkers', source:'Handwritten Summary', date:'Oct 2026', created:0,
+   content:'Distinction between War of Position and War of Manoeuvre. Superstructure divided into Political Society (coercion) and Civil Society (consent/hegemony).', keywords:['Gramsci','Hegemony','Optional Paper-I'], file:null}
+]; }
+
+/* ---------- normalisers (also used to read old backups) ---------- */
+function normTopic(t, kind){
+  t = t || {};
+  const pc = Math.max(0, int(t.pyqCount, 0));
+  const o = {id:String(t.id || uid(kind==='opt'?'o':'s')), paper:String(t.paper || (kind==='opt'?'Paper-I':'GS-I')),
+    topic:String(t.topic||''), stage:clamp(int(t.stage,0),0,4), pyqCount:pc, pyqDone:clamp(int(t.pyqDone,0),0,Math.max(pc, int(t.pyqDone,0))), lastTouched:isKey(t.lastTouched)?t.lastTouched:null};
+  if(kind==='opt') o.section = String(t.section || t.subject || 'Core Unit'); else o.subject = String(t.subject || t.section || '');
+  return o;
+}
+function normCore(c){
+  const d = defaultCore(); c = c || {};
+  const s = Object.assign({}, d.settings, c.settings||{});
+  s.dailyTarget = clamp(num(s.dailyTarget, 8), 0.5, 18);
+  s.gsCutoff = clamp(num(s.gsCutoff, 95), 0, 200);
+  if(!isKey(s.prelimsDate)) s.prelimsDate = d.settings.prelimsDate;
+  if(!isKey(s.mainsDate)) s.mainsDate = d.settings.mainsDate;
+  let od = c.optionalData; if(typeof od === 'string'){ try{ od = JSON.parse(od); }catch(e){ od = null; } }
+  const optionalData = {};
+  Object.entries(od && typeof od==='object' ? od : d.optionalData).forEach(([k,v]) => { if(Array.isArray(v)) optionalData[k] = v.map(t => normTopic(t,'opt')); });
+  if(!Object.keys(optionalData).length) Object.assign(optionalData, d.optionalData);
+  if(!optionalData[s.selectedOptional]) s.selectedOptional = Object.keys(optionalData)[0];
+  return {
+    v:3, settings:s,
+    syllabus: Array.isArray(c.syllabus) ? c.syllabus.map(t => normTopic(t,'gs')) : d.syllabus,
+    optionalData,
+    thinkers: Array.isArray(c.thinkers) ? c.thinkers.map(t => ({id:String(t.id||uid('th')), scholar:String(t.scholar||''), quote:String(t.quote||''), paper:t.paper==='Paper-II'?'Paper-II':'Paper-I'})) : d.thinkers,
+    mocks: Array.isArray(c.mocks) ? c.mocks.map(normMock) : []
+  };
+}
+function normMock(m){
+  m = m || {};
+  const type = (m.type==='CSAT' || /csat/i.test(String(m.type||''))) ? 'CSAT' : 'GS';
+  const q = MOCK_TYPES[type].q;
+  const correct = clamp(int(m.correct,0),0,q), incorrect = clamp(int(m.incorrect,0),0,q-correct);
+  return {id:String(m.id||uid('m')), name:String(m.name||'Mock test'), type, correct, incorrect, date:isKey(m.date)?m.date:today()};
+}
+function normDays(d){
+  const def = defaultDays(); d = d || {};
+  const log = {};
+  if(d.log && typeof d.log === 'object') Object.entries(d.log).forEach(([k,v]) => { if(isKey(k) && v) log[k] = {min:Math.max(0, num(v.min,0)), note:String(v.note||''), sessions:Math.max(0,int(v.sessions,0)), routine:Array.isArray(v.routine)?v.routine.map(String):[]}; });
+  return {
+    v:3, log,
+    routine: Array.isArray(d.routine) ? d.routine.map(r => ({id:String(r.id||uid('r')), title:String(r.title||''), tag:String(r.tag||'GS-I')})) : def.routine,
+    tasks: Array.isArray(d.tasks) ? d.tasks.map(normTask) : def.tasks
+  };
+}
+function normTask(t){
+  t = t || {};
+  const done = !!(t.done || t.completed);
+  return {id:String(t.id||uid('t')), title:String(t.title||''), tag:String(t.tag||'GS-I'), done, date:isKey(t.date)?t.date:today(), doneAt:done?(isKey(t.doneAt)?t.doneAt:(isKey(t.date)?t.date:today())):null};
+}
+function normNote(n){
+  n = n || {};
+  let file = n.file || null;
+  if(!file && n.fileAttachment){ const fa = n.fileAttachment; file = {name:String(fa.name||'file'), size:String(fa.size||''), type:String(fa.type||''), url:String(fa.url||'')}; }
+  if(file){
+    file = {name:String(file.name||'file'), size:String(file.size||''), type:String(file.type||''), url:file.url?String(file.url):'', assetId:file.assetId?String(file.assetId):null, missing:!!file.missing};
+    if(file.url.startsWith('blob:')){ file.url=''; file.missing = true; }
+    if(!file.url) file.missing = true;
+  }
+  const idTime = int(String(n.id||'').replace(/^\D+/,'').slice(0,13), 0);
+  return {id:String(n.id||uid('n')).replace(/[^A-Za-z0-9_.~:@+-]/g,'_'), title:String(n.title||'Untitled note'), category:NOTE_CATEGORIES.includes(n.category)?n.category:(n.category?String(n.category):NOTE_CATEGORIES[0]),
+    subFolder:String(n.subFolder||'General'), source:String(n.source||'Self Notes'), date:String(n.date||fmt(today(),{day:'2-digit',month:'short',year:'numeric'})),
+    content:String(n.content||''), keywords:Array.isArray(n.keywords)?n.keywords.map(String).filter(Boolean):[], file,
+    created: num(n.created, idTime>1e12 ? idTime : Date.now())};
+}
+/* old tracker backups (v2) and this tracker's own backups (v3) */
+function migrate(obj){
+  if(!obj || typeof obj !== 'object') throw new Error('not an object');
+  if(obj.format === 'upsc360'){
+    return {core:normCore(obj.core), days:normDays(obj.days), notes:(obj.notes||[]).map(normNote)};
+  }
+  const looksOld = obj.syllabus || obj.optionalData || obj.tasks || obj.notes || obj.mocks;
+  if(!looksOld) throw new Error('unknown format');
+  const core = normCore({
+    settings:{theme: typeof obj.darkMode==='boolean' ? (obj.darkMode?'dark':'light') : 'system', selectedOptional: obj.selectedOptional},
+    syllabus: obj.syllabus, optionalData: obj.optionalData, thinkers: obj.optionalThinkers, mocks: obj.mocks
+  });
+  const exportedDay = obj.exportedAt ? dkey(new Date(obj.exportedAt)) : today();
+  const days = normDays({tasks:(obj.tasks||[]).map(t => Object.assign({}, t, {date: exportedDay})), routine: undefined});
+  days.routine = [];
+  const me = Array.isArray(obj.peers) ? obj.peers.find(p => p && p.id === 'p4') : null;
+  if(me && num(me.hoursToday,0) > 0) days.log[exportedDay] = {min:Math.round(num(me.hoursToday)*60), note:'', sessions:0, routine:[]};
+  return {core, days, notes:(obj.notes||[]).map(normNote)};
+}
+
+/* ---------- state ---------- */
+const S = {core:null, days:null, notes:[], mode:'loading'};   // mode: loading | cloud | local
+const UI = {tab:'today', paper:'ALL', q:'', optQ:'', optPaper:'ALL', noteCat:'ALL', noteQ:'', expanded:{}, firstRun:false, logDay:null,
+  mock:{type:'GS', name:'', correct:65, incorrect:20}, chartType:'GS'};
+const TABS = [['today','Today'],['syllabus','GS & CSAT'],['optional','Optional'],['notes','Notes vault'],['mocks','Mock lab'],['log','Study log']];
+
+const sel = () => S.core.settings.selectedOptional;
+const optList = () => S.core.optionalData[sel()] || [];
+const pct = list => list.length ? Math.round(list.reduce((a,t)=>a+t.stage,0) / (list.length*4) * 100) : 0;
+const dayLog = (k, create) => { let L = S.days.log[k]; if(!L && create){ L = S.days.log[k] = {min:0, note:'', sessions:0, routine:[]}; } return L || {min:0, note:'', sessions:0, routine:[]}; };
+
+/* ---------- persistence ---------- */
+const LKEY = 'upsc360_vault_v3';
+const Store = {
+  db:null, assets:null, downloads:null,
+  dirty:{core:false, days:false}, inflight:{core:false, days:false}, t:{},
+  noteChain:Promise.resolve(), notePending:0, error:false,
+  busy(){ return this.dirty.core || this.dirty.days || this.inflight.core || this.inflight.days || this.notePending > 0; },
+  mark(which, now){
+    if(S.mode === 'loading') return;
+    this.dirty[which] = true; this.error = false; paintStatus();
+    clearTimeout(this.t[which]);
+    this.t[which] = setTimeout(() => this.flush(which), now ? 0 : 600);
+  },
+  async flush(which){
+    clearTimeout(this.t[which]);
+    if(!this.dirty[which]) return;
+    if(S.mode === 'local'){ this.dirty[which] = false; saveLocal(); paintStatus(); return; }
+    if(S.mode !== 'cloud' || this.inflight[which]) return;
+    this.dirty[which] = false; this.inflight[which] = true; paintStatus();
+    try { await writeDoc(this.db.doc('vault/' + which), clone(S[which])); }
+    catch(e){ this.dirty[which] = true; this.error = true; reportSaveError(e); }
+    this.inflight[which] = false;
+    if(this.dirty[which] && !this.error) this.flush(which);
+    paintStatus();
+  },
+  flushAll(){ this.flush('core'); this.flush('days'); },
+  note(op){ // op: () => Promise
+    if(S.mode === 'local'){ saveLocal(); paintStatus(); return; }
+    if(S.mode !== 'cloud') return;
+    this.notePending++; paintStatus();
+    this.noteChain = this.noteChain.then(op).catch(e => { this.error = true; reportSaveError(e); }).then(() => { this.notePending--; paintStatus(); });
+  }
+};
+async function writeDoc(ref, body){
+  try { await ref.set(body); }
+  catch(e){
+    if(e && (e.code === 'unavailable' || !e.code)){ await new Promise(r => setTimeout(r, 700 + Math.random()*800)); await ref.set(body); }
+    else throw e;
+  }
+}
+function reportSaveError(e){
+  const c = e && e.code;
+  if(c === 'quota_exceeded') toast('Storage is full. Delete some old notes or files, then edit again to save.', 6000);
+  else if(c === 'invalid_argument') toast('That change was too large to save in one place. Trim long notes or old log entries.', 6000);
+  else if(c === 'revoked') toast('Saving was switched off for this view. Reload the page.', 6000);
+  else toast('Couldn’t save just now. Your next edit will try again.', 4500);
+  paintStatus();
+}
+function saveLocal(){
+  try { localStorage.setItem(LKEY, JSON.stringify({core:S.core, days:S.days, notes:S.notes})); Store.error = false; }
+  catch(e){ Store.error = true; toast('This browser refused to save (storage full or blocked). Download a backup from Settings.', 6000); }
+}
+function loadLocal(){
+  try { const raw = localStorage.getItem(LKEY); if(raw){ const o = JSON.parse(raw); return {core:normCore(o.core), days:normDays(o.days), notes:(o.notes||[]).map(normNote)}; } } catch(e){}
+  return null;
+}
+function paintStatus(){
+  const el = $('#status'); if(!el) return;
+  let s, t;
+  if(S.mode === 'loading'){ s = UI.slow ? 'unreachable' : 'loading'; t = UI.slow ? 'Still connecting…' : 'Opening your vault…'; }
+  else if(Store.error){ s = 'error'; t = 'Not saved yet'; }
+  else if(Store.busy()){ s = 'saving'; t = 'Saving…'; }
+  else if(S.mode === 'cloud'){ s = 'saved'; t = 'Saved to your account'; }
+  else { s = 'saved'; t = 'Saved in this browser'; }
+  el.dataset.s = s; el.lastElementChild.textContent = t;
+  el.title = S.mode === 'cloud' ? 'Every change saves automatically to your Claude account and syncs across your devices.' : S.mode === 'local' ? 'This copy saves in this browser only. Open the published page link to sync across devices.' : '';
+}
+window.addEventListener('visibilitychange', () => { if(document.visibilityState === 'hidden') Store.flushAll(); });
+window.addEventListener('pagehide', () => Store.flushAll());
+
+/* ---------- boot ---------- */
+let rootTheme = null;
+function applyTheme(){
+  const t = S.core ? S.core.settings.theme : 'system';
+  const r = document.documentElement;
+  if(rootTheme === null) rootTheme = r.getAttribute('data-theme') || '';
+  if(t === 'light' || t === 'dark') r.setAttribute('data-theme', t);
+  else if(rootTheme) r.setAttribute('data-theme', rootTheme); else r.removeAttribute('data-theme');
+}
+function pruneOld(){
+  const cut = addDays(today(), -60);
+  const before = S.days.tasks.length;
+  S.days.tasks = S.days.tasks.filter(t => !(t.done && t.date < cut));
+  return before !== S.days.tasks.length;
+}
+function startLocal(){
+  const saved = loadLocal();
+  if(saved){ S.core = saved.core; S.days = saved.days; S.notes = saved.notes; }
+  else { S.core = defaultCore(); S.days = defaultDays(); S.notes = defaultNotes(); UI.firstRun = true; }
+  S.mode = 'local'; pruneOld(); applyTheme(); render(); paintStatus();
+}
+async function boot(){
+  renderTabs();
+  const c = window.claude;
+  if(!c || typeof c.use !== 'function'){ startLocal(); return; }
+  let db = null;
+  try { db = await c.use('db'); } catch(e){ db = null; }
+  if(!db){ startLocal(); return; }
+  Store.db = db;
+  c.use('assets').then(a => { Store.assets = a; }).catch(()=>{});
+  c.use('downloads').then(d => { Store.downloads = d; }).catch(()=>{});
+
+  const got = {core:null, days:null};
+  let notesReady = false, started = false;
+  const slow = setTimeout(() => { UI.slow = true; paintStatus(); if(S.mode==='loading') $('#main').innerHTML = '<div class="loading"><h2>Still connecting…</h2><p>Your saved progress can’t be reached yet. Keep this page open; it will load as soon as the connection returns.</p></div>'; }, 10000);
+  const maybeStart = () => {
+    if(started || !got.core || !got.days || !notesReady) return;
+    started = true; clearTimeout(slow); UI.slow = false;
+    const fresh = !got.core.exists && !got.days.exists;
+    S.core = got.core.exists ? normCore(got.core.data()) : defaultCore();
+    S.days = got.days.exists ? normDays(got.days.data()) : defaultDays();
+    if(fresh && !S.notes.length){ S.notes = defaultNotes(); UI.firstRun = true; UI.seedNotes = true; }
+    S.mode = 'cloud';
+    if(pruneOld()) Store.mark('days');
+    applyTheme(); render(); paintStatus();
+  };
+  const onDoc = which => snap => {
+    if(snap.metadata && snap.metadata.fromCache && !started) return; // wait for the store's answer before allowing edits
+    if(!started){ got[which] = snap; maybeStart(); return; }
+    if(Store.dirty[which] || Store.inflight[which] || (snap.metadata && snap.metadata.hasPendingWrites)) return;
+    if(!snap.exists) return;
+    const incoming = which === 'core' ? normCore(snap.data()) : normDays(snap.data());
+    if(JSON.stringify(incoming) === JSON.stringify(S[which])) return;
+    S[which] = incoming; if(which==='core') applyTheme();
+    softRender();
+  };
+  const onErr = e => { if(!started){ clearTimeout(slow); toast('Couldn’t open your saved data. Working in this browser instead.', 5000); startLocal(); } else { Store.error = true; paintStatus(); } };
+  db.doc('vault/core').onSnapshot(onDoc('core'), onErr);
+  db.doc('vault/days').onSnapshot(onDoc('days'), onErr);
+  db.collection('notes').onSnapshot(snap => {
+    if(snap.metadata && snap.metadata.fromCache && !notesReady) return;
+    const list = snap.docs.filter(d => d.exists).map(d => normNote(d.data()));
+    list.sort((a,b) => b.created - a.created);
+    if(!notesReady){ notesReady = true; S.notes = list; maybeStart(); return; }
+    if(UI.seedNotes && !list.length) return;
+    UI.seedNotes = false;
+    S.notes = list; softRender();
+  }, onErr);
+}
+
+/* ---------- rendering ---------- */
+let pendingSoft = false;
+function softRender(){
+  const a = document.activeElement;
+  if(a && a.matches && a.matches('textarea, input[type="text"], input[type="number"], input[type="date"], input:not([type])') && $('#main').contains(a) && a.id !== 'q-gs' && a.id !== 'q-opt' && a.id !== 'q-notes'){
+    pendingSoft = true; return;
+  }
+  render();
+}
+document.addEventListener('focusout', () => { if(pendingSoft){ setTimeout(() => { const a = document.activeElement; if(!(a && $('#main').contains(a) && a.matches('textarea,input'))){ pendingSoft = false; render(); } }, 50); } });
+
+function renderTabs(){
+  const counts = S.core ? {syllabus: pct(S.core.syllabus)+'%', optional: pct(optList())+'%', notes: S.notes.length} : {};
+  $('#tabs').innerHTML = TABS.map(([id,label]) => '<button class="tab" role="tab" data-act="tab" data-tab="'+id+'" aria-selected="'+(UI.tab===id)+'">'+label+(counts[id]!=null?' <span class="tc">'+counts[id]+'</span>':'')+'</button>').join('');
+  if(S.core){ const short = sel().split(' (')[0]; $('#brand-sub').textContent = 'CSE ' + parseKey(S.core.settings.prelimsDate).getFullYear() + ' · ' + short + ' optional'; }
+}
+function render(){
+  if(!S.core) return;
+  const a = document.activeElement, fid = a && a.id, s0 = a && a.selectionStart, s1 = a && a.selectionEnd;
+  renderTabs();
+  const v = {today:vToday, syllabus:vSyllabus, optional:vOptional, notes:vNotes, mocks:vMocks, log:vLog}[UI.tab] || vToday;
+  $('#main').innerHTML = v();
+  if(fid){ const el = document.getElementById(fid); if(el && $('#main').contains(el)){ el.focus(); try{ if(s0!=null) el.setSelectionRange(s0, s1); }catch(e){} } }
+  const hw = $('.hm-wrap'); if(hw) hw.scrollLeft = hw.scrollWidth;
+  paintTimer();
+}
+
+/* --- shared bits --- */
+function ring(p, size){
+  size = size || 58; const r = (size-8)/2, C = 2*Math.PI*r, off = C*(1-clamp(p,0,1));
+  return '<svg class="ring'+(p>=1?' done':'')+'" width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" aria-hidden="true"><circle class="bg" cx="'+size/2+'" cy="'+size/2+'" r="'+r+'"/><circle class="fg" cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 '+size/2+' '+size/2+')"/></svg>';
+}
+function streakInfo(){
+  const L = S.days.log, t = today();
+  const active = k => (L[k] && (L[k].min > 0 || (L[k].routine||[]).length)) || S.days.tasks.some(x => x.done && x.doneAt === k);
+  let cur = 0, k = active(t) ? t : addDays(t,-1);
+  while(active(k)){ cur++; k = addDays(k,-1); }
+  const keys = Object.keys(L).concat(S.days.tasks.filter(x=>x.done&&x.doneAt).map(x=>x.doneAt)).filter(isKey).sort();
+  let best = 0;
+  if(keys.length){ let run = 0, d = keys[0]; const end = t; while(d <= end){ if(active(d)){ run++; best = Math.max(best, run); } else run = 0; d = addDays(d,1); } }
+  return {cur, best:Math.max(best,cur)};
+}
+function taskRow(t, opts){
+  opts = opts || {};
+  return '<div class="task'+(t.done?' done':'')+'">' +
+    '<button class="chk" role="checkbox" aria-checked="'+t.done+'" aria-label="Mark done" data-act="task-toggle" data-id="'+esc(t.id)+'">'+ic('check')+'</button>' +
+    '<span class="tt">'+esc(t.title)+'</span>' +
+    (opts.date ? '<span class="tag plain">'+esc(fmt(t.date))+'</span>' : '') +
+    '<span class="tag">'+esc(t.tag)+'</span>' +
+    (opts.carry ? '<button class="btn sm" data-act="task-today" data-id="'+esc(t.id)+'" title="Move to today">Today '+ic('arrow')+'</button>' : '') +
+    '<button class="ib" data-act="task-edit" data-id="'+esc(t.id)+'" aria-label="Edit task">'+ic('edit')+'</button>' +
+    '<button class="ib del" data-act="task-del" data-id="'+esc(t.id)+'" aria-label="Delete task">'+ic('trash')+'</button></div>';
+}
+const opts = (list, cur) => list.map(x => '<option'+(x===cur?' selected':'')+'>'+esc(x)+'</option>').join('');
+
+/* --- TODAY --- */
+function vToday(){
+  const t = today(), st = S.core.settings, L = dayLog(t);
+  const dP = daysBetween(t, st.prelimsDate), dM = daysBetween(t, st.mainsDate);
+  const prelimsAhead = dP >= 0;
+  const targetMin = st.dailyTarget*60;
+  const todays = S.days.tasks.filter(x => x.date === t);
+  const carried = S.days.tasks.filter(x => x.date < t && !x.done).sort((a,b)=>a.date<b.date?-1:1);
+  const later = S.days.tasks.filter(x => x.date > t).sort((a,b)=>a.date<b.date?-1:1);
+  const doneN = todays.filter(x=>x.done).length;
+  const rDone = S.days.routine.filter(r => (L.routine||[]).includes(r.id)).length;
+  const sk = streakInfo();
+  const gs = pct(S.core.syllabus), op = pct(optList());
+  const pyqDone = S.core.syllabus.concat(optList()).reduce((a,x)=>a+x.pyqDone,0), pyqAll = S.core.syllabus.concat(optList()).reduce((a,x)=>a+x.pyqCount,0);
+
+  let banner = '';
+  if(UI.firstRun) banner = '<div class="banner"><p><b>Bring your progress across.</b> Import the backup file you downloaded from your old tracker. After that, every change saves by itself'+(S.mode==='cloud'?' to your account, on every device you open this on.':' in this browser.')+'</p><div class="row"><button class="btn primary" data-act="import">'+ic('upload')+' Import backup</button><button class="btn quiet" data-act="dismiss-first">Start fresh</button></div></div>';
+  else if(S.mode === 'local') banner = '<div class="banner"><p><b>Saving in this browser only.</b> Open the published link of this tracker to have it save to your account and sync across devices. Download a backup from Settings now and then.</p></div>';
+
+  // week bars
+  const week = []; for(let i=6;i>=0;i--){ const k = addDays(t,-i); week.push({k, m:dayLog(k).min}); }
+  const maxM = Math.max(targetMin, ...week.map(w=>w.m), 60);
+  const weekTot = week.reduce((a,w)=>a+w.m,0);
+  const bars = week.map(w => '<div class="wk'+(w.k===t?' today':'')+(w.m>=targetMin?' hit':'')+'" title="'+esc(fmtLong(w.k))+': '+hm(w.m)+'"><span class="n">'+(w.m?hrs(w.m):'')+'</span><div class="b" style="height:'+Math.max(2,(w.m/maxM)*92).toFixed(1)+'px"></div><span class="l">'+parseKey(w.k).toLocaleDateString('en-IN',{weekday:'short'}).slice(0,2)+'</span></div>').join('');
+  const tl = (92*(targetMin/maxM)) + 22;
+
+  return banner +
+  '<section class="hero">' +
+    '<div class="dday"><div class="lines"></div>' +
+      '<div class="eyebrow">'+(prelimsAhead ? 'Prelims · '+esc(fmtLong(st.prelimsDate)) : 'Mains · '+esc(fmtLong(st.mainsDate)))+'</div>' +
+      '<div class="big"><span class="hl">D−'+Math.max(0, prelimsAhead?dP:dM)+'</span></div>' +
+      '<div class="sub">'+(prelimsAhead ? 'Mains begins in <b>'+dM+' days</b>' : (dM>=0?'Prelims is behind you. Mains is the focus now.':'Exam season is over. Update your dates in Settings.'))+'<br>Today is '+esc(fmtLong(t))+'</div>' +
+    '</div>' +
+    '<div class="kpis">' +
+      '<button class="kpi" data-act="log-day" data-day="'+t+'"><span class="eyebrow">Studied today</span><div class="ringrow">'+ring(L.min/targetMin)+'<div><div class="v">'+hrs(L.min)+'<small>/ '+st.dailyTarget+'h</small></div></div></div><span class="d">'+(L.sessions||0)+' focus session'+(L.sessions===1?'':'s')+' · tap to edit</span></button>' +
+      '<button class="kpi" data-act="tab" data-tab="log"><span class="eyebrow">Streak</span><div class="v">'+sk.cur+'<small>day'+(sk.cur===1?'':'s')+'</small></div><span class="d">Best run: '+sk.best+' day'+(sk.best===1?'':'s')+' · '+hrs(weekTot)+'h this week</span></button>' +
+      '<button class="kpi" data-act="tab" data-tab="syllabus"><span class="eyebrow">GS & CSAT</span><div class="v">'+gs+'<small>%</small></div><div class="bar-track"><div class="bar-fill" style="width:'+gs+'%"></div></div><span class="d">'+S.core.syllabus.filter(x=>x.stage===4).length+' of '+S.core.syllabus.length+' topics exam ready</span></button>' +
+      '<button class="kpi" data-act="tab" data-tab="optional"><span class="eyebrow">'+esc(sel().split(' (')[0])+' optional</span><div class="v">'+op+'<small>%</small></div><div class="bar-track"><div class="bar-fill" style="width:'+op+'%"></div></div><span class="d">PYQs solved: '+pyqDone+' / '+pyqAll+'</span></button>' +
+    '</div>' +
+  '</section>' +
+  '<div class="grid2">' +
+    '<div class="stack" style="gap:20px">' +
+      '<section class="card"><div class="card-h"><div><h3>Today’s targets</h3><p>'+doneN+' of '+todays.length+' done'+(todays.length?' · '+Math.round(doneN/todays.length*100)+'%':'')+'. Unfinished targets carry over to tomorrow.</p></div></div>' +
+        '<form class="addrow" data-form="task-add"><input class="in" id="task-title" name="title" placeholder="Add a target, e.g. Optional Paper-I thinkers + 20 PYQs" required autocomplete="off"><select class="in" name="tag" id="task-tag" aria-label="Paper tag">'+opts(TAGS, UI.lastTag||'GS-II')+'</select><select class="in" name="when" id="task-when" aria-label="Day"><option value="0">Today</option><option value="1">Tomorrow</option></select><button class="btn primary" type="submit">'+ic('plus')+' Add</button></form>' +
+        '<div class="stack" style="gap:6px">'+(todays.length ? todays.sort((a,b)=>a.done-b.done).map(x=>taskRow(x)).join('') : '<div class="empty">No targets for today yet. Add the first one above.</div>')+'</div>' +
+        (carried.length ? '<div class="subhead"><span>Carried over · '+carried.length+'</span><button class="btn sm" data-act="carry-all">Move all to today</button></div><div class="stack" style="gap:6px">'+carried.map(x=>taskRow(x,{carry:true,date:true})).join('')+'</div>' : '') +
+        (later.length ? '<div class="subhead"><span>Planned ahead · '+later.length+'</span></div><div class="stack" style="gap:6px">'+later.slice(0,6).map(x=>taskRow(x,{date:true})).join('')+'</div>' : '') +
+      '</section>' +
+      '<section class="card"><div class="card-h"><div><h3>Daily routine</h3><p>Habits you repeat every day. Ticks reset each morning; each day’s ticks are kept in your log. '+rDone+' of '+S.days.routine.length+' today.</p></div></div>' +
+        '<div class="stack" style="gap:6px">'+(S.days.routine.length ? S.days.routine.map(r => { const on = (L.routine||[]).includes(r.id); return '<div class="task'+(on?' done':'')+'"><button class="chk" role="checkbox" aria-checked="'+on+'" aria-label="Done today" data-act="routine-toggle" data-id="'+esc(r.id)+'">'+ic('check')+'</button><span class="tt">'+esc(r.title)+'</span><span class="tag gold">'+ic('repeat')+esc(r.tag)+'</span><button class="ib" data-act="routine-edit" data-id="'+esc(r.id)+'" aria-label="Edit habit">'+ic('edit')+'</button><button class="ib del" data-act="routine-del" data-id="'+esc(r.id)+'" aria-label="Delete habit">'+ic('trash')+'</button></div>'; }).join('') : '<div class="empty">Add daily habits like newspaper reading or answer writing.</div>')+'</div>' +
+        '<form class="addrow" data-form="routine-add" style="margin:12px 0 0;grid-template-columns:minmax(0,1fr) auto auto"><input class="in" id="routine-title" name="title" placeholder="Add a daily habit, e.g. 2 Mains answers" required autocomplete="off"><select class="in" name="tag" aria-label="Paper tag">'+opts(TAGS,'Answer Writing')+'</select><button class="btn" type="submit">'+ic('plus')+' Add</button></form>' +
+      '</section>' +
+    '</div>' +
+    '<div class="stack" style="gap:20px">' +
+      '<section class="card"><div class="card-h"><div><h3>Focus timer</h3><p>Finished sessions add to today’s study time on their own.</p></div></div>' +
+        '<div class="timer"><div class="clock" id="clock">50:00</div><div class="lbl" id="clock-lbl"></div><div class="row"><button class="btn go" data-act="timer-go" id="timer-go">'+ic('play')+' Start</button><button class="btn" data-act="timer-stop" title="Stop and log the time so far">'+ic('stop')+' Stop & log</button><button class="btn" data-act="timer-reset" aria-label="Reset timer">'+ic('reset')+'</button></div></div>' +
+        '<div class="presets">'+[[25,'25m sprint'],[50,'50m deep'],[90,'90m block'],[180,'3h Mains']].map(([m,l]) => '<button class="btn" data-act="timer-preset" data-min="'+m+'" aria-pressed="'+(Timer.total===m*60)+'">'+l+'</button>').join('')+'</div>' +
+        '<form class="row" data-form="manual-time" style="margin-top:12px;flex-wrap:nowrap"><input class="in" type="number" name="min" id="manual-min" min="5" max="720" step="5" placeholder="Minutes studied" aria-label="Minutes studied" style="flex:1"><button class="btn" type="submit">'+ic('plus')+' Log time</button></form>' +
+      '</section>' +
+      '<section class="card"><div class="card-h"><div><h3>Last 7 days</h3><p>'+hm(weekTot)+' total · target '+st.dailyTarget+'h a day</p></div><button class="btn sm quiet" data-act="tab" data-tab="log">Full log '+ic('arrow')+'</button></div>' +
+        '<div class="week">'+bars+'<div class="target-line" style="bottom:'+tl.toFixed(1)+'px"><span>'+st.dailyTarget+'h</span></div></div>' +
+      '</section>' +
+      '<section class="card"><div class="card-h"><div><h3>Today’s journal</h3><p>What you covered, what stuck, what to revise. Saves as you type.</p></div></div>' +
+        '<textarea class="in" id="journal" data-input="journal" rows="5" placeholder="e.g. Finished Rawls’ difference principle, wrote PYQ 2019 Q5. Revise Nozick tomorrow.">'+esc(L.note)+'</textarea>' +
+      '</section>' +
+    '</div>' +
+  '</div>';
+}
+
+/* --- SYLLABUS (GS & CSAT) and OPTIONAL --- */
+function stageCell(t, kind){
+  let h = '<span class="omr" role="group" aria-label="Mastery stage">';
+  for(let n=1;n<=4;n++) h += '<button class="bub'+(t.stage>=n?' on':'')+(t.stage===4?' full':'')+'" data-act="stage" data-kind="'+kind+'" data-id="'+esc(t.id)+'" data-n="'+n+'" title="'+STAGES[n]+'" aria-label="'+STAGES[n]+'" aria-pressed="'+(t.stage>=n)+'">'+n+'</button>';
+  return h + '</span><span class="stl s'+t.stage+'">'+STAGES[t.stage]+'</span>';
+}
+function pyqCell(t, kind){
+  return '<span class="pyq"><button data-act="pyq" data-kind="'+kind+'" data-id="'+esc(t.id)+'" data-d="-1" aria-label="One fewer PYQ solved">−</button><span title="PYQs solved / asked in 10 years">'+t.pyqDone+'/'+t.pyqCount+'</span><button data-act="pyq" data-kind="'+kind+'" data-id="'+esc(t.id)+'" data-d="1" aria-label="One more PYQ solved">+</button></span>';
+}
+function topicTable(list, kind){
+  if(!list.length) return '<div class="empty">No topics match. Clear the search or add a topic below.</div>';
+  return '<div class="tw"><table class="t"><thead><tr><th>Paper</th><th>'+(kind==='opt'?'Section':'Subject')+'</th><th>Micro-topic</th><th>PYQs solved</th><th>Stage · tap an oval</th><th>Last touched</th><th class="r"></th></tr></thead><tbody>' +
+    list.map(t => '<tr><td class="paper">'+esc(t.paper)+'</td><td class="subj">'+esc(kind==='opt'?t.section:t.subject)+'</td><td class="topic">'+esc(t.topic)+'</td><td>'+pyqCell(t,kind)+'</td><td style="white-space:nowrap">'+stageCell(t,kind)+'</td><td class="faint" style="white-space:nowrap;font-size:13px">'+(t.lastTouched ? esc(fmt(t.lastTouched)) + (daysBetween(t.lastTouched,today())>=21 && t.stage<4 ? ' <span class="tag warn">revise</span>':'') : '—')+'</td><td class="r" style="white-space:nowrap"><button class="ib" data-act="topic-edit" data-kind="'+kind+'" data-id="'+esc(t.id)+'" aria-label="Edit topic">'+ic('edit')+'</button><button class="ib del" data-act="topic-del" data-kind="'+kind+'" data-id="'+esc(t.id)+'" aria-label="Delete topic">'+ic('trash')+'</button></td></tr>').join('') +
+    '</tbody></table></div>';
+}
+function vSyllabus(){
+  const all = S.core.syllabus;
+  const papers = Array.from(new Set(PAPERS.concat(all.map(t=>t.paper))));
+  const q = UI.q.toLowerCase();
+  const list = all.filter(t => (UI.paper==='ALL' || t.paper===UI.paper) && (!q || (t.topic+' '+t.subject).toLowerCase().includes(q)));
+  const pbs = papers.filter(p => all.some(t=>t.paper===p)).map(p => { const l = all.filter(t=>t.paper===p), v = pct(l); return '<button class="pb" data-act="paper" data-p="'+esc(p)+'" aria-pressed="'+(UI.paper===p)+'"><div class="row"><b>'+esc(p)+'</b><span class="num">'+v+'%</span></div><div class="bar-track"><div class="bar-fill'+(v===100?' good':'')+'" style="width:'+v+'%"></div></div></button>'; }).join('');
+  return '<section class="card"><div class="card-h"><div><h2>GS, Essay & CSAT syllabus</h2><p>'+pct(all)+'% overall. Fill an oval to set the stage: 1 first reading, 2 notes ready, 3 revised twice, 4 exam ready. Count PYQs as you solve them.</p></div>' +
+    '<div class="row"><div class="search">'+ic('search')+'<input class="in" id="q-gs" data-input="q" placeholder="Search topics" value="'+esc(UI.q)+'" autocomplete="off"></div>'+(UI.paper!=='ALL'?'<button class="chip" aria-pressed="true" data-act="paper" data-p="ALL">'+esc(UI.paper)+' ✕</button>':'')+'</div></div>' +
+    '<div class="paperbars">'+pbs+'</div>' + topicTable(list,'gs') +
+    '<form class="addtopic" data-form="topic-add" data-kind="gs"><select class="in" name="paper" aria-label="Paper">'+opts(papers, UI.paper!=='ALL'?UI.paper:'GS-I')+'</select><input class="in" name="subject" placeholder="Subject, e.g. Polity" required autocomplete="off"><input class="in" name="topic" placeholder="Micro-topic" required autocomplete="off"><input class="in" type="number" name="pyqCount" min="0" placeholder="PYQs" aria-label="PYQs asked"><button class="btn primary" type="submit">'+ic('plus')+' Add topic</button></form>' +
+  '</section>';
+}
+function vOptional(){
+  const all = optList(), q = UI.optQ.toLowerCase();
+  const list = all.filter(t => (UI.optPaper==='ALL' || t.paper===UI.optPaper) && (!q || (t.topic+' '+t.section).toLowerCase().includes(q)));
+  const p1 = all.filter(t=>t.paper==='Paper-I'), p2 = all.filter(t=>t.paper==='Paper-II');
+  const pb = (k,l) => { const v = pct(l); return '<button class="pb" data-act="optpaper" data-p="'+k+'" aria-pressed="'+(UI.optPaper===k)+'"><div class="row"><b>'+k+' · 250 marks</b><span class="num">'+v+'%</span></div><div class="bar-track"><div class="bar-fill'+(v===100?' good':'')+'" style="width:'+v+'%"></div></div><span class="faint" style="font-size:12px">'+l.length+' units · '+l.reduce((a,t)=>a+t.pyqDone,0)+'/'+l.reduce((a,t)=>a+t.pyqCount,0)+' PYQs</span></button>'; };
+  const th = S.core.thinkers;
+  return '<section class="card"><div class="card-h"><div><span class="tag gold">500 marks in Mains</span><h2 style="margin-top:8px">'+esc(sel())+'</h2><p>'+pct(all)+'% mastered across Paper-I and Paper-II. Add your own units as your syllabus breaks down further.</p></div>' +
+      '<div class="row"><label class="f" style="min-width:220px">Your optional<select class="in" id="opt-select" data-input="optional">'+opts(Object.keys(S.core.optionalData), sel())+'</select></label></div></div>' +
+    '<div class="paperbars">'+pb('Paper-I',p1)+pb('Paper-II',p2)+'</div>' +
+    '<div class="row" style="margin-bottom:10px"><div class="search">'+ic('search')+'<input class="in" id="q-opt" data-input="optQ" placeholder="Search units" value="'+esc(UI.optQ)+'" autocomplete="off"></div>'+(UI.optPaper!=='ALL'?'<button class="chip" aria-pressed="true" data-act="optpaper" data-p="ALL">'+UI.optPaper+' ✕</button>':'')+'</div>' +
+    topicTable(list,'opt') +
+    '<form class="addtopic" data-form="topic-add" data-kind="opt"><select class="in" name="paper" aria-label="Paper">'+opts(['Paper-I','Paper-II'], UI.optPaper!=='ALL'?UI.optPaper:'Paper-I')+'</select><input class="in" name="section" placeholder="Section, e.g. Part A: Theory" autocomplete="off"><input class="in" name="topic" placeholder="Micro-topic, e.g. Nozick’s entitlement theory" required autocomplete="off"><input class="in" type="number" name="pyqCount" min="0" placeholder="PYQs" aria-label="PYQs asked"><button class="btn primary" type="submit">'+ic('plus')+' Add unit</button></form>' +
+  '</section>' +
+  '<div class="grid3">' +
+    '<section class="card"><div class="card-h"><div><h3>Add a thinker</h3><p>Quoting scholars by name lifts optional answers.</p></div></div>' +
+      '<form class="stack" data-form="thinker-add"><label class="f">Scholar, thinker or committee<input class="in" name="scholar" required placeholder="e.g. C. Raja Mohan" autocomplete="off"></label><label class="f">Paper<select class="in" name="paper">'+opts(['Paper-I','Paper-II'],'Paper-I')+'</select></label><label class="f">Core argument or quote<textarea class="in" name="quote" rows="3" required placeholder="The line you want to remember before Mains"></textarea></label><button class="btn primary" type="submit">Save to thinker bank</button></form>' +
+    '</section>' +
+    '<section class="card"><div class="card-h"><div><h3>Thinker bank</h3><p>'+th.length+' entries</p></div></div><div class="notes-grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">' +
+      (th.length ? th.map(t => '<div class="thinker"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><b style="min-width:0;overflow-wrap:anywhere">'+esc(t.scholar)+'</b><span class="row" style="flex-wrap:nowrap;gap:2px"><span class="tag plain">'+esc(t.paper)+'</span><button class="ib" data-act="thinker-edit" data-id="'+esc(t.id)+'" aria-label="Edit">'+ic('edit')+'</button><button class="ib del" data-act="thinker-del" data-id="'+esc(t.id)+'" aria-label="Delete">'+ic('trash')+'</button></span></div><q>'+esc(t.quote)+'</q></div>').join('') : '<div class="empty">Your saved thinkers will show here.</div>') +
+    '</div></section>' +
+  '</div>';
+}
+
+/* --- NOTES --- */
+function vNotes(){
+  const q = UI.noteQ.toLowerCase();
+  const list = S.notes.filter(n => (UI.noteCat==='ALL' || n.category===UI.noteCat) && (!q || (n.title+' '+n.content+' '+n.subFolder+' '+n.keywords.join(' ')).toLowerCase().includes(q)));
+  const cats = Array.from(new Set(NOTE_CATEGORIES.concat(S.notes.map(n=>n.category))));
+  const count = c => S.notes.filter(n=>n.category===c).length;
+  const card = n => {
+    const long = n.content.length > 260 || n.content.split('\n').length > 4;
+    const open = UI.expanded[n.id];
+    let file = '';
+    if(n.file){
+      file = '<div class="file"><span class="ext">'+esc(n.file.type||'FILE')+'</span><span class="fn" title="'+esc(n.file.name)+'">'+esc(n.file.name)+(n.file.size?' · '+esc(n.file.size):'')+'</span>' +
+        (n.file.url && !n.file.missing ? '<a href="'+esc(n.file.url)+'" target="_blank" rel="noopener">Open '+ic('arrow')+'</a>' : '<span class="faint" style="font-size:12px">File not stored</span>') + '</div>';
+    }
+    return '<article class="note"><div class="row" style="justify-content:space-between;flex-wrap:nowrap;align-items:flex-start"><div class="chips" style="gap:5px;min-width:0"><span class="tag">'+esc(n.category.split(' (')[0])+'</span><span class="tag gold">'+ic('folder')+esc(n.subFolder)+'</span></div><span class="row" style="flex-wrap:nowrap;gap:0"><button class="ib" data-act="note-edit" data-id="'+esc(n.id)+'" aria-label="Edit note">'+ic('edit')+'</button><button class="ib del" data-act="note-del" data-id="'+esc(n.id)+'" aria-label="Delete note">'+ic('trash')+'</button></span></div>' +
+      '<h4>'+esc(n.title)+'</h4>' + (n.content ? '<div class="body'+(long&&!open?' clamp':'')+'">'+esc(n.content)+'</div>' : '') +
+      (long ? '<button class="btn sm quiet" style="align-self:flex-start;margin-left:-8px" data-act="note-more" data-id="'+esc(n.id)+'">'+(open?'Show less':'Show more')+'</button>' : '') +
+      file + '<div class="row" style="justify-content:space-between"><span class="kw">'+n.keywords.map(k=>'#'+esc(k)).join(' ')+'</span><span class="meta">'+esc(n.source)+' · '+esc(n.date)+'</span></div></article>';
+  };
+  return '<section class="card"><div class="card-h"><div><h2>Notes vault</h2><p>Upload PDFs, scans and text files into a category, or write a note straight in. Text files are read in so you can search them.</p></div><button class="btn primary" data-act="note-new">'+ic('edit')+' Write a note</button></div>' +
+    '<div class="grid3" style="gap:14px;align-items:end"><div class="stack"><label class="f">Category<select class="in" id="up-cat" data-input="upCat">'+opts(NOTE_CATEGORIES, UI.upCat||NOTE_CATEGORIES[0])+'</select></label><label class="f">Folder<input class="in" id="up-sub" data-input="upSub" value="'+esc(UI.upSub==null?'Class notes':UI.upSub)+'" placeholder="e.g. Laxmikanth short notes" autocomplete="off"></label></div>' +
+    '<div class="drop" id="drop" data-act="upload" role="button" tabindex="0"><b>'+ic('upload')+' Drop files here or tap to choose</b><span>PDF, images of handwritten pages, TXT, Markdown, CSV · filed under '+esc((UI.upCat||NOTE_CATEGORIES[0]).split(' (')[0])+'</span></div></div>' +
+  '</section>' +
+  '<div class="row" style="justify-content:space-between"><div class="chips"><button class="chip" data-act="notecat" data-c="ALL" aria-pressed="'+(UI.noteCat==='ALL')+'">All · '+S.notes.length+'</button>'+cats.filter(c=>count(c)).map(c => '<button class="chip" data-act="notecat" data-c="'+esc(c)+'" aria-pressed="'+(UI.noteCat===c)+'">'+esc(c.split(' (')[0])+' · '+count(c)+'</button>').join('')+'</div><div class="search">'+ic('search')+'<input class="in" id="q-notes" data-input="noteQ" placeholder="Search notes and files" value="'+esc(UI.noteQ)+'" autocomplete="off"></div></div>' +
+  (list.length ? '<div class="notes-grid">'+list.map(card).join('')+'</div>' : '<div class="empty">'+(S.notes.length?'No notes match this filter.':'Your notes will show here. Write one or upload a file above.')+'</div>');
+}
+
+/* --- MOCKS --- */
+const net = m => { const T = MOCK_TYPES[m.type]||MOCK_TYPES.GS; return m.correct*T.plus - m.incorrect*T.minus; };
+function chart(list, type){
+  const T = MOCK_TYPES[type], cut = type==='GS' ? S.core.settings.gsCutoff : CSAT_QUALIFY;
+  if(!list.length) return '<div class="empty">Log a '+(type==='GS'?'GS':'CSAT')+' mock to see your score line here.</div>';
+  const W = 640, H = 230, l = 40, r = 16, tp = 16, b = 34, iw = W-l-r, ih = H-tp-b;
+  const X = i => l + (list.length===1 ? iw/2 : i*iw/(list.length-1)), Y = v => tp + ih - clamp(v,0,T.max)/T.max*ih;
+  let g = '';
+  [0,50,100,150,200].forEach(v => { g += '<line class="grid" x1="'+l+'" x2="'+(W-r)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text x="'+(l-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+v+'</text>'; });
+  g += '<line class="cut" x1="'+l+'" x2="'+(W-r)+'" y1="'+Y(cut)+'" y2="'+Y(cut)+'"/><text class="cutlbl" x="'+(W-r)+'" y="'+(Y(cut)-6)+'" text-anchor="end">'+(type==='GS'?'Your cut-off target '+cut:'CSAT qualifying 66.67')+'</text>';
+  const pts = list.map((m,i)=>[X(i),Y(net(m))]);
+  if(pts.length>1) g += '<path class="area" d="M'+pts[0][0]+' '+Y(0)+' L'+pts.map(p=>p.join(' ')).join(' L')+' L'+pts[pts.length-1][0]+' '+Y(0)+' Z"/><path class="line" d="M'+pts.map(p=>p.join(' ')).join(' L')+'"/>';
+  const every = Math.ceil(list.length/7);
+  list.forEach((m,i) => { g += '<circle class="pt'+(i===list.length-1?' last':'')+'" cx="'+pts[i][0]+'" cy="'+pts[i][1]+'" r="'+(i===list.length-1?5.5:4)+'"><title>'+esc(m.name)+': '+net(m).toFixed(2)+'</title></circle>'; if(i%every===0 || i===list.length-1) g += '<text x="'+pts[i][0]+'" y="'+(H-12)+'" text-anchor="'+(list.length>1 && i===list.length-1?'end':(list.length>1 && i===0?'start':'middle'))+'">'+esc(fmt(m.date))+'</text>'; });
+  const last = net(list[list.length-1]);
+  g += '<text x="'+clamp(pts[pts.length-1][0],l+20,W-r-20)+'" y="'+(pts[pts.length-1][1]-12)+'" text-anchor="middle" style="fill:var(--ink);font-weight:600">'+last.toFixed(1)+'</text>';
+  return '<svg class="chart" viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Mock score trend">'+g+'</svg>';
+}
+function vMocks(){
+  const f = UI.mock, T = MOCK_TYPES[f.type];
+  const c = clamp(int(f.correct,0),0,T.q), w = clamp(int(f.incorrect,0),0,T.q-c);
+  const score = c*T.plus - w*T.minus, cut = f.type==='GS' ? S.core.settings.gsCutoff : CSAT_QUALIFY;
+  const acc = c+w ? Math.round(c/(c+w)*100) : 0;
+  const all = S.core.mocks.slice().sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+  const ofType = all.filter(m=>m.type===UI.chartType);
+  const best = ofType.length ? Math.max(...ofType.map(net)) : 0, avg = ofType.length ? ofType.reduce((a,m)=>a+net(m),0)/ofType.length : 0;
+  return '<div class="grid3">' +
+    '<section class="card"><div class="card-h"><div><h3>Score a mock</h3><p>'+(f.type==='GS'?'+2 for correct, −0.66 (one third) for wrong, 100 questions.':'+2.5 for correct, −0.83 for wrong, 80 questions. Qualifying at 66.67.')+'</p></div></div>' +
+      '<form class="stack" data-form="mock-add"><div class="chips">'+Object.keys(MOCK_TYPES).map(k=>'<button type="button" class="chip" data-act="mock-type" data-t="'+k+'" aria-pressed="'+(f.type===k)+'">'+MOCK_TYPES[k].label+'</button>').join('')+'</div>' +
+      '<label class="f">Test name<input class="in" id="mock-name" data-input="mock.name" name="name" required value="'+esc(f.name)+'" placeholder="e.g. Vision FL-4 or PYQ 2025" autocomplete="off"></label>' +
+      '<div class="row" style="flex-wrap:nowrap"><label class="f" style="flex:1"><span style="color:var(--good)">Correct</span><input class="in num" type="number" id="mock-c" data-input="mock.correct" min="0" max="'+T.q+'" value="'+esc(f.correct)+'"></label><label class="f" style="flex:1"><span style="color:var(--bad)">Wrong</span><input class="in num" type="number" id="mock-w" data-input="mock.incorrect" min="0" max="'+T.q+'" value="'+esc(f.incorrect)+'"></label><label class="f" style="flex:1">Date<input class="in" type="date" id="mock-d" name="date" value="'+today()+'"></label></div>' +
+      '<div class="calc" id="calc"><div class="row" style="justify-content:space-between"><span class="small">Attempted '+(c+w)+'/'+T.q+' · skipped '+(T.q-c-w)+' · accuracy '+acc+'%</span></div><div class="row" style="justify-content:space-between;align-items:baseline;margin-top:6px"><span class="small">Net score</span><span class="score'+(score>=cut?' safe':'')+'">'+score.toFixed(2)+'<span class="small"> / '+T.max+'</span></span></div><div class="small" style="margin-top:4px">'+(score>=cut ? (f.type==='GS'?'At or above your cut-off target of '+cut+'.':'Qualifies.') : (f.type==='GS'?(cut-score).toFixed(1)+' below your cut-off target. Fewer wild guesses cut the penalty.':'Below the qualifying mark by '+(cut-score).toFixed(1)+'.'))+'</div></div>' +
+      '<button class="btn primary" type="submit">Save to mock log</button></form>' +
+    '</section>' +
+    '<section class="card"><div class="card-h"><div><h3>Score trend</h3><p>'+(ofType.length ? ofType.length+' tests · best '+best.toFixed(1)+' · average '+avg.toFixed(1) : 'No tests of this type yet')+'</p></div><div class="chips">'+Object.keys(MOCK_TYPES).map(k=>'<button class="chip" data-act="chart-type" data-t="'+k+'" aria-pressed="'+(UI.chartType===k)+'">'+(k==='GS'?'GS':'CSAT')+'</button>').join('')+'</div></div>' +
+      chart(ofType, UI.chartType) +
+      '<div class="tw" style="margin-top:14px"><table class="t" style="min-width:560px"><thead><tr><th>Test</th><th>Type</th><th>Date</th><th>Right / wrong</th><th>Accuracy</th><th class="r">Net</th><th></th></tr></thead><tbody>' +
+      (all.length ? all.slice().reverse().map(m => { const T2 = MOCK_TYPES[m.type]; const nn = net(m); const ok = nn >= (m.type==='GS'?S.core.settings.gsCutoff:CSAT_QUALIFY); return '<tr><td style="font-weight:600">'+esc(m.name)+'</td><td><span class="tag plain">'+(m.type==='GS'?'GS':'CSAT')+'</span></td><td class="faint" style="white-space:nowrap">'+esc(fmt(m.date,{day:'numeric',month:'short',year:'2-digit'}))+'</td><td class="num"><span style="color:var(--good)">'+m.correct+'✓</span> / <span style="color:var(--bad)">'+m.incorrect+'✗</span> <span class="faint">of '+T2.q+'</span></td><td class="num">'+(m.correct+m.incorrect?Math.round(m.correct/(m.correct+m.incorrect)*100):0)+'%</td><td class="r num" style="font-weight:600;color:'+(ok?'var(--good)':'var(--ink)')+'">'+nn.toFixed(2)+'</td><td class="r" style="white-space:nowrap"><button class="ib" data-act="mock-edit" data-id="'+esc(m.id)+'" aria-label="Edit">'+ic('edit')+'</button><button class="ib del" data-act="mock-del" data-id="'+esc(m.id)+'" aria-label="Delete">'+ic('trash')+'</button></td></tr>'; }).join('') : '<tr><td colspan="7" class="faint" style="text-align:center;padding:20px">Saved mocks will be listed here.</td></tr>') +
+      '</tbody></table></div>' +
+    '</section></div>';
+}
+
+/* --- LOG --- */
+function vLog(){
+  const t = today(), L = S.days.log, target = S.core.settings.dailyTarget*60;
+  const end = parseKey(t); const start = parseKey(addDays(t, -7*25)); const dow = (start.getDay()+6)%7; start.setDate(start.getDate()-dow);
+  let cells = '', k = dkey(start);
+  const lvl = m => !m ? 0 : m < target*0.25 ? 1 : m < target*0.5 ? 2 : m < target ? 3 : 4;
+  while(k <= t){ const m = (L[k]||{}).min||0; cells += '<button data-act="log-day" data-day="'+k+'" data-l="'+lvl(m)+'" class="'+(k===t?'today':'')+'" title="'+esc(fmtLong(k))+': '+hm(m)+'" aria-label="'+esc(fmtLong(k))+', '+hm(m)+'"></button>'; k = addDays(k,1); }
+  const lastN = n => { let s = 0; for(let i=0;i<n;i++) s += ((L[addDays(t,-i)]||{}).min||0); return s; };
+  const total = Object.values(L).reduce((a,x)=>a+(x.min||0),0);
+  const sk = streakInfo();
+  const rows = Object.keys(L).filter(x => L[x].min>0 || L[x].note || (L[x].routine||[]).length).sort().reverse().slice(0,45);
+  return '<section class="card"><div class="card-h"><div><h2>Study log</h2><p>Each square is a day; darker means closer to your '+S.core.settings.dailyTarget+'h target. Tap any day to fill in or correct it.</p></div><button class="btn" data-act="log-day" data-day="'+t+'">'+ic('edit')+' Edit today</button></div>' +
+    '<div class="stats" style="margin-bottom:16px"><div class="stat"><div class="v">'+sk.cur+'</div><div class="k">Current streak (days)</div></div><div class="stat"><div class="v">'+sk.best+'</div><div class="k">Best streak</div></div><div class="stat"><div class="v">'+hrs(lastN(7))+'h</div><div class="k">Last 7 days</div></div><div class="stat"><div class="v">'+hrs(lastN(30)/30)+'h</div><div class="k">Daily average, 30 days · '+hrs(total)+'h all time</div></div></div>' +
+    '<div class="hm-wrap"><div class="hm">'+cells+'</div></div>' +
+    '<div class="row" style="justify-content:space-between;margin-top:10px"><span class="faint" style="font-size:12px">'+esc(fmt(dkey(start),{day:'numeric',month:'short'}))+' → today</span><span class="legend">Less <i style="background:var(--h0)"></i><i style="background:var(--h1)"></i><i style="background:var(--h2)"></i><i style="background:var(--h3)"></i><i style="background:var(--h4)"></i> More</span></div>' +
+  '</section>' +
+  '<section class="card"><div class="card-h"><div><h3>Day by day</h3><p>Your journal entries and hours, newest first.</p></div></div>' +
+    (rows.length ? rows.map(d => { const x = L[d]; const rd = S.days.routine.filter(r => (x.routine||[]).includes(r.id)).length; return '<div class="dayrow"><span class="dt">'+esc(fmt(d,{weekday:'short',day:'numeric',month:'short'}))+'</span><span class="hrs">'+hm(x.min)+'</span><span class="nt">'+(x.note?esc(x.note):'<span class="faint">No journal note</span>')+(rd?' <span class="tag gold">'+rd+' habit'+(rd===1?'':'s')+'</span>':'')+'</span><button class="ib" data-act="log-day" data-day="'+d+'" aria-label="Edit day">'+ic('edit')+'</button></div>'; }).join('') : '<div class="empty">Days you study will be listed here. Use the focus timer or log time from the Today tab.</div>') +
+  '</section>';
+}
+
+/* ---------- modal & toast ---------- */
+let toastT;
+function toast(msg, ms){ const el = $('#toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), ms||2600); }
+let modalCfg = null;
+function field(f){
+  const id = 'm-'+f.name, v = f.value == null ? '' : f.value;
+  if(f.type === 'select') return '<label class="f" for="'+id+'">'+esc(f.label)+'<select class="in" id="'+id+'" name="'+f.name+'">'+f.options.map(o => { const val = Array.isArray(o)?o[0]:o, lab = Array.isArray(o)?o[1]:o; return '<option value="'+esc(val)+'"'+(String(val)===String(v)?' selected':'')+'>'+esc(lab)+'</option>'; }).join('')+'</select></label>';
+  if(f.type === 'textarea') return '<label class="f" for="'+id+'">'+esc(f.label)+'<textarea class="in" id="'+id+'" name="'+f.name+'" rows="'+(f.rows||4)+'"'+(f.required?' required':'')+' placeholder="'+esc(f.placeholder||'')+'">'+esc(v)+'</textarea></label>';
+  return '<label class="f" for="'+id+'">'+esc(f.label)+'<input class="in" id="'+id+'" name="'+f.name+'" type="'+(f.type||'text')+'" value="'+esc(v)+'"'+(f.required?' required':'')+(f.min!=null?' min="'+f.min+'"':'')+(f.max!=null?' max="'+f.max+'"':'')+(f.step?' step="'+f.step+'"':'')+' placeholder="'+esc(f.placeholder||'')+'" autocomplete="off"></label>';
+}
+function openModal(cfg){
+  modalCfg = cfg;
+  let rows = '', fs = cfg.fields || [];
+  for(let i=0;i<fs.length;i++){ if(fs[i].half && fs[i+1] && fs[i+1].half){ rows += '<div class="two">'+field(fs[i])+field(fs[i+1])+'</div>'; i++; } else rows += field(fs[i]); }
+  $('#modal-root').innerHTML = '<div class="scrim" data-act="modal-close-scrim"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-title"><h3 id="m-title">'+esc(cfg.title)+'</h3>'+(cfg.desc?'<p class="desc">'+cfg.desc+'</p>':'')+
+    '<form id="modal-form" data-form="modal">'+rows+(cfg.extra||'')+'<div class="acts">'+(cfg.del?'<button type="button" class="btn danger left" data-act="modal-del">'+ic('trash')+' '+esc(cfg.delLabel||'Delete')+'</button>':'')+(cfg.noCancel?'':'<button type="button" class="btn" data-act="modal-close">Cancel</button>')+(cfg.save!==false?'<button type="submit" class="btn '+(cfg.danger?'danger':'primary')+'">'+esc(cfg.saveLabel||'Save')+'</button>':'')+'</div></form></div></div>';
+  const first = $('#modal-root').querySelector('input:not([type=hidden]),textarea,select,button[type=submit]');
+  if(first) setTimeout(() => first.focus(), 30);
+}
+function closeModal(){ modalCfg = null; $('#modal-root').innerHTML = ''; }
+function confirmBox(title, desc, label, fn){ openModal({title, desc, saveLabel:label, danger:true, onSave:() => { fn(); return true; }}); }
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && modalCfg) closeModal(); if((e.key==='Enter'||e.key===' ') && e.target.id==='drop'){ e.preventDefault(); $('#upload-file').click(); } });
+
+/* ---------- timer ---------- */
+const Timer = {total:3000, remaining:3000, endAt:0, running:false, iv:null};
+function paintTimer(){
+  const rem = Timer.running ? Math.max(0, Math.round((Timer.endAt - Date.now())/1000)) : Timer.remaining;
+  const s = String(Math.floor(rem/60)).padStart(2,'0') + ':' + String(rem%60).padStart(2,'0');
+  const c = $('#clock'); if(c) c.textContent = s;
+  const l = $('#clock-lbl'); if(l) l.textContent = Timer.running ? 'Focus on. Phone away.' : (Timer.remaining < Timer.total ? 'Paused · '+hm((Timer.total-Timer.remaining)/60)+' done' : 'Pick a block and start');
+  const g = $('#timer-go'); if(g) g.innerHTML = Timer.running ? ic('pause')+' Pause' : ic('play')+(Timer.remaining<Timer.total?' Resume':' Start');
+  const mt = $('#minitimer'); mt.classList.toggle('on', Timer.running && UI.tab !== 'today'); $('#minitime').textContent = s;
+  if(Timer.running) document.title = s + ' · UPSC 360'; else document.title = 'UPSC 360 Command Centre';
+}
+function timerTick(){
+  if(!Timer.running) return;
+  if(Date.now() >= Timer.endAt){ Timer.running = false; clearInterval(Timer.iv); const m = Timer.total/60; Timer.remaining = Timer.total; logMinutes(m, true); beep(); toast('Session complete: '+hm(m)+' added to today. Take a 10-minute break.', 4500); }
+  paintTimer();
+}
+function logMinutes(m, session){
+  if(!S.days || m <= 0) return;
+  const L = dayLog(today(), true); L.min = Math.round((L.min + m)*10)/10; if(session) L.sessions = (L.sessions||0)+1;
+  Store.mark('days'); if(UI.tab==='today' || UI.tab==='log') softRender();
+}
+let actx = null;
+function beep(){ try { actx = actx || new (window.AudioContext||window.webkitAudioContext)(); [0,0.25,0.5].forEach(t => { const o = actx.createOscillator(), g = actx.createGain(); o.frequency.value = 880; g.gain.setValueAtTime(0.0001, actx.currentTime+t); g.gain.exponentialRampToValueAtTime(0.2, actx.currentTime+t+0.02); g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime+t+0.2); o.connect(g).connect(actx.destination); o.start(actx.currentTime+t); o.stop(actx.currentTime+t+0.22); }); } catch(e){} }
+
+/* ---------- mutations ---------- */
+const findTopic = (kind, id) => (kind==='opt' ? optList() : S.core.syllabus).find(t => t.id === id);
+function topicList(kind){ return kind==='opt' ? S.core.optionalData[sel()] : S.core.syllabus; }
+function touch(t){ t.lastTouched = today(); }
+
+function editTopic(kind, id){
+  const t = findTopic(kind, id); if(!t) return;
+  const papers = kind==='opt' ? ['Paper-I','Paper-II'] : Array.from(new Set(PAPERS.concat(S.core.syllabus.map(x=>x.paper))));
+  openModal({title:'Edit topic', fields:[
+    {name:'paper', label:'Paper', type:'select', options:papers, value:t.paper, half:true},
+    kind==='opt' ? {name:'section', label:'Section', value:t.section, half:true} : {name:'subject', label:'Subject', value:t.subject, half:true},
+    {name:'topic', label:'Micro-topic', type:'textarea', rows:3, value:t.topic, required:true},
+    {name:'pyqCount', label:'PYQs asked (10 years)', type:'number', min:0, value:t.pyqCount, half:true},
+    {name:'pyqDone', label:'PYQs solved', type:'number', min:0, value:t.pyqDone, half:true},
+    {name:'stage', label:'Stage', type:'select', options:STAGES.map((s,i)=>[i, i+' · '+s]), value:t.stage}
+  ], del:true, onDel:() => { topicList(kind).splice(topicList(kind).indexOf(t),1); Store.mark('core'); toast('Topic deleted'); },
+  onSave:v => { t.paper = v.paper; if(kind==='opt') t.section = v.section.trim()||'Core Unit'; else t.subject = v.subject.trim(); t.topic = v.topic.trim(); t.pyqCount = Math.max(0,int(v.pyqCount)); t.pyqDone = clamp(int(v.pyqDone),0,Math.max(t.pyqCount,int(v.pyqDone))); const ns = clamp(int(v.stage),0,4); if(ns!==t.stage){ t.stage = ns; touch(t); } Store.mark('core'); toast('Topic updated'); return true; }});
+}
+function editTask(id){
+  const t = S.days.tasks.find(x=>x.id===id); if(!t) return;
+  openModal({title:'Edit target', fields:[
+    {name:'title', label:'Target', type:'textarea', rows:2, value:t.title, required:true},
+    {name:'tag', label:'Paper tag', type:'select', options:Array.from(new Set(TAGS.concat([t.tag]))), value:t.tag, half:true},
+    {name:'date', label:'Day', type:'date', value:t.date, half:true}
+  ], del:true, onDel:() => { S.days.tasks = S.days.tasks.filter(x=>x!==t); Store.mark('days'); },
+  onSave:v => { t.title = v.title.trim(); t.tag = v.tag; if(isKey(v.date)) t.date = v.date; Store.mark('days'); return true; }});
+}
+function editRoutine(id){
+  const r = S.days.routine.find(x=>x.id===id); if(!r) return;
+  openModal({title:'Edit daily habit', fields:[{name:'title', label:'Habit', value:r.title, required:true},{name:'tag', label:'Paper tag', type:'select', options:Array.from(new Set(TAGS.concat([r.tag]))), value:r.tag}],
+    del:true, delLabel:'Remove habit', onDel:() => { S.days.routine = S.days.routine.filter(x=>x!==r); Store.mark('days'); },
+    onSave:v => { r.title = v.title.trim(); r.tag = v.tag; Store.mark('days'); return true; }});
+}
+function editDay(k){
+  const L = dayLog(k);
+  const doneTasks = S.days.tasks.filter(t => t.done && t.doneAt === k);
+  openModal({title:fmtLong(k), desc:(doneTasks.length ? doneTasks.length+' target'+(doneTasks.length===1?'':'s')+' finished this day. ' : '')+'Correct the hours if the timer missed a session.', fields:[
+    {name:'hours', label:'Hours studied', type:'number', min:0, max:20, step:0.25, value:Math.round(L.min/60*100)/100, half:true},
+    {name:'sessions', label:'Focus sessions', type:'number', min:0, max:40, value:L.sessions||0, half:true},
+    {name:'note', label:'Journal', type:'textarea', rows:5, value:L.note, placeholder:'What you covered, what to revise'}
+  ], onSave:v => { const D = dayLog(k, true); D.min = Math.round(clamp(num(v.hours),0,20)*60); D.sessions = Math.max(0,int(v.sessions)); D.note = v.note; if(!D.min && !D.note && !D.sessions && !(D.routine||[]).length) delete S.days.log[k]; Store.mark('days'); toast('Day saved'); return true; }});
+}
+function editThinker(id){
+  const t = S.core.thinkers.find(x=>x.id===id); if(!t) return;
+  openModal({title:'Edit thinker', fields:[{name:'scholar', label:'Scholar', value:t.scholar, required:true},{name:'paper', label:'Paper', type:'select', options:['Paper-I','Paper-II'], value:t.paper},{name:'quote', label:'Quote or argument', type:'textarea', value:t.quote, required:true}],
+    del:true, onDel:() => { S.core.thinkers = S.core.thinkers.filter(x=>x!==t); Store.mark('core'); }, onSave:v => { t.scholar = v.scholar.trim(); t.paper = v.paper; t.quote = v.quote.trim(); Store.mark('core'); return true; }});
+}
+function editMock(id){
+  const m = S.core.mocks.find(x=>x.id===id); if(!m) return;
+  openModal({title:'Edit mock', fields:[{name:'name', label:'Test name', value:m.name, required:true},{name:'type', label:'Paper', type:'select', options:Object.keys(MOCK_TYPES).map(k=>[k,MOCK_TYPES[k].label]), value:m.type, half:true},{name:'date', label:'Date', type:'date', value:m.date, half:true},{name:'correct', label:'Correct', type:'number', min:0, value:m.correct, half:true},{name:'incorrect', label:'Wrong', type:'number', min:0, value:m.incorrect, half:true}],
+    del:true, onDel:() => { S.core.mocks = S.core.mocks.filter(x=>x!==m); Store.mark('core'); }, onSave:v => { Object.assign(m, normMock(Object.assign({}, m, v))); Store.mark('core'); return true; }});
+}
+function noteForm(n){
+  const isNew = !n;
+  n = n || {title:'', category:UI.noteCat!=='ALL'?UI.noteCat:NOTE_CATEGORIES[1], subFolder:'General notes', source:'Self Notes', content:'', keywords:[]};
+  openModal({title:isNew?'Write a note':'Edit note', fields:[
+    {name:'title', label:'Headline', value:n.title, required:true, placeholder:'e.g. Urban floods & sponge cities'},
+    {name:'category', label:'Category', type:'select', options:Array.from(new Set(NOTE_CATEGORIES.concat([n.category]))), value:n.category},
+    {name:'subFolder', label:'Folder', value:n.subFolder, half:true},
+    {name:'source', label:'Source', type:'select', options:Array.from(new Set(SOURCES.concat([n.source]))), value:n.source, half:true},
+    {name:'content', label:'Mains fodder: facts, articles, judgments, data', type:'textarea', rows:7, value:n.content},
+    {name:'keywords', label:'Keywords (comma separated)', value:n.keywords.join(', '), placeholder:'NDMA, SDG-11, Urbanisation'}
+  ], del:!isNew, onDel:() => deleteNote(n.id),
+  onSave:v => {
+    const data = {title:v.title.trim(), category:v.category, subFolder:v.subFolder.trim()||'General', source:v.source, content:v.content.trim(), keywords:v.keywords.split(',').map(s=>s.trim()).filter(Boolean)};
+    if(isNew){ const note = normNote(Object.assign(data, {id:uid('n'), created:Date.now(), file:null})); putNote(note, true); toast('Note saved'); }
+    else { Object.assign(n, data); putNote(n); toast('Note updated'); }
+    return true;
+  }});
+}
+function putNote(note, isNew){
+  if(isNew) S.notes.unshift(note);
+  UI.seedNotes = false;
+  if(S.mode === 'cloud'){ const body = clone(note); Store.note(() => writeDoc(Store.db.doc('notes/'+note.id), body)); }
+  else Store.note();
+  render();
+}
+function deleteNote(id){
+  const n = S.notes.find(x=>x.id===id); if(!n) return;
+  S.notes = S.notes.filter(x=>x!==n);
+  if(S.mode === 'cloud'){
+    Store.note(() => Store.db.doc('notes/'+id).delete());
+    if(n.file && n.file.assetId && Store.assets) Store.assets.delete(n.file.assetId).catch(()=>{});
+  } else Store.note();
+  toast('Note deleted'); render();
+}
+function seedNotesIfNeeded(){
+  if(UI.seedNotes && S.mode==='cloud'){ UI.seedNotes = false; S.notes.forEach(n => { const b = clone(n); Store.note(() => writeDoc(Store.db.doc('notes/'+n.id), b)); }); }
+}
+
+/* files */
+const TEXTY = /\.(txt|md|csv|json)$/i;
+function readAs(file, how){ return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error); if(how==='text') r.readAsText(file); else r.readAsDataURL(file); }); }
+function dataUrlToBlob(u){ const m = /^data:([^,]*?)(;base64)?,(.*)$/s.exec(u); if(!m) return null; let raw; try { raw = m[2] ? atob(m[3]) : unescape(encodeURIComponent(decodeURIComponent(m[3]))); } catch(e){ return null; } const a = new Uint8Array(raw.length); for(let i=0;i<raw.length;i++) a[i] = raw.charCodeAt(i) & 255; return new Blob([a], {type:(m[1]||'').split(';')[0]||'application/octet-stream'}); }
+async function storeFile(blob, name){
+  if(S.mode === 'cloud' && Store.assets){
+    try { const r = await Store.assets.upload(blob); return {url:r.url, assetId:r.id}; }
+    catch(e){ return {err:(e && e.code) || 'failed'}; }
+  }
+  if(S.mode === 'local' && blob.size <= 150*1024){ return {url: await readAs(blob,'data')}; }
+  return {err:'too_large'};
+}
+async function processFiles(files){
+  if(!files || !files.length) return;
+  const cat = UI.upCat || NOTE_CATEGORIES[0], sub = (UI.upSub==null?'Class notes':UI.upSub).trim() || 'Uploaded files';
+  toast('Uploading '+files.length+' file'+(files.length===1?'':'s')+'…', 8000);
+  let stored = 0, missed = 0;
+  for(const file of Array.from(files)){
+    const ext = (file.name.split('.').pop()||'FILE').toUpperCase().slice(0,6);
+    const sizeKB = (file.size/1024).toFixed(1)+' KB';
+    let content = '';
+    if(TEXTY.test(file.name) || (file.type||'').startsWith('text/')){ try { content = String(await readAs(file,'text')).slice(0, 6000); } catch(e){} }
+    const r = await storeFile(file, file.name);
+    const fileObj = {name:file.name, size:sizeKB, type:ext, url:r.url||'', assetId:r.assetId||null, missing:!r.url};
+    if(r.url) stored++; else missed++;
+    const note = normNote({id:uid('up'), created:Date.now(), title:file.name.replace(/\.[^/.]+$/,''), category:cat, subFolder:sub, source:'Uploaded '+ext, content: content || ('Filed under '+cat.split(' (')[0]+' › '+sub+'.'), keywords:[ext, cat.split(' ')[0]], file:fileObj});
+    putNote(note, true);
+  }
+  toast(missed ? stored+' file'+(stored===1?'':'s')+' stored. '+missed+' kept as a named note only ('+(S.mode==='local'?'files over 150 KB can’t be kept in a browser copy':'Word files and other unsupported types can’t be stored; save them as PDF')+').' : stored+' file'+(stored===1?'':'s')+' saved to '+cat.split(' (')[0]+'.', missed?7000:3000);
+}
+
+/* backup */
+function backupJson(){ return JSON.stringify({format:'upsc360', version:3, exportedAt:new Date().toISOString(), core:S.core, days:S.days, notes:S.notes}, null, 2); }
+async function exportBackup(){
+  const name = 'upsc_360_backup_' + today() + '.json', data = backupJson();
+  if(Store.downloads){
+    try { await Store.downloads.save({filename:name, data}); toast('Backup saved'); return; }
+    catch(e){ if(e && e.code === 'declined') return; if(e && e.code === 'rate_limited'){ toast('A save prompt is already open.'); return; } }
+  }
+  try { const u = URL.createObjectURL(new Blob([data], {type:'application/json'})); const a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u), 4000); toast('Backup downloaded'); }
+  catch(e){ toast('Downloads are blocked here.'); }
+}
+async function importBackup(file){
+  let parsed;
+  try { parsed = migrate(JSON.parse(await readAs(file,'text'))); }
+  catch(e){ toast('That file isn’t a tracker backup. Choose the .json file you downloaded.', 5000); return; }
+  const days = Object.keys(parsed.days.log).length;
+  confirmBox('Replace your tracker with this backup?', 'The file has <b>'+parsed.core.syllabus.length+'</b> GS topics, <b>'+Object.values(parsed.core.optionalData).reduce((a,l)=>a+l.length,0)+'</b> optional units, <b>'+parsed.notes.length+'</b> notes, <b>'+parsed.core.mocks.length+'</b> mocks, <b>'+parsed.days.tasks.length+'</b> targets'+(days?' and <b>'+days+'</b> logged days':'')+'. What is in the tracker now will be replaced.', 'Replace with backup', () => applyImport(parsed));
+}
+async function applyImport(p){
+  const oldIds = S.notes.map(n=>n.id), oldRoutine = S.days ? S.days.routine : [];
+  if(!p.days.routine.length) p.days.routine = oldRoutine.length ? oldRoutine : defaultDays().routine;
+  S.core = p.core; S.days = p.days; UI.firstRun = false; UI.seedNotes = false;
+  applyTheme();
+  // move inline files into the vault's file store
+  for(const n of p.notes){
+    if(n.file && n.file.url && n.file.url.startsWith('data:') && S.mode === 'cloud' && Store.assets){
+      const b = dataUrlToBlob(n.file.url);
+      if(b){ const r = await storeFile(b, n.file.name); if(r.url){ n.file.url = r.url; n.file.assetId = r.assetId; n.file.missing = false; } else if(n.file.url.length > 200000){ n.file.url = ''; n.file.missing = true; } }
+    }
+  }
+  S.notes = p.notes.sort((a,b)=>b.created-a.created);
+  if(S.mode === 'cloud'){
+    const keep = new Set(S.notes.map(n=>n.id));
+    oldIds.filter(id => !keep.has(id)).forEach(id => Store.note(() => Store.db.doc('notes/'+id).delete()));
+    S.notes.forEach(n => { const b = clone(n); Store.note(() => writeDoc(Store.db.doc('notes/'+n.id), b)); });
+  }
+  Store.mark('core', true); Store.mark('days', true); if(S.mode==='local') saveLocal();
+  render(); toast('Backup restored. From now on every change saves by itself.', 4000);
+}
+function openSettings(){
+  const st = S.core.settings;
+  openModal({title:'Settings & backup', desc: S.mode==='cloud' ? 'Every change saves to your account automatically and syncs to any device you open this page on. A backup file is optional, for safekeeping.' : 'This copy saves in this browser only. Download a backup now and then, or open the published link to sync to your account.',
+    fields:[
+      {name:'theme', label:'Theme', type:'select', options:[['system','Match device'],['light','Light'],['dark','Dark']], value:st.theme},
+      {name:'prelimsDate', label:'Prelims date', type:'date', value:st.prelimsDate, half:true},
+      {name:'mainsDate', label:'Mains start', type:'date', value:st.mainsDate, half:true},
+      {name:'dailyTarget', label:'Daily study target (hours)', type:'number', min:1, max:16, step:0.5, value:st.dailyTarget, half:true},
+      {name:'gsCutoff', label:'GS cut-off target (out of 200)', type:'number', min:0, max:200, step:0.5, value:st.gsCutoff, half:true}
+    ],
+    extra:'<hr><div class="row"><button type="button" class="btn" data-act="export">'+ic('download')+' Download backup</button><button type="button" class="btn" data-act="import">'+ic('upload')+' Restore from backup</button></div><p class="faint" style="font-size:12.5px">Restore accepts backups from this tracker and from your old UPSC 360 file.</p><hr><div class="row"><button type="button" class="btn danger" data-act="reset-progress">Reset syllabus progress to 0%</button></div>',
+    saveLabel:'Save settings',
+    onSave:v => { st.theme = v.theme; if(isKey(v.prelimsDate)) st.prelimsDate = v.prelimsDate; if(isKey(v.mainsDate)) st.mainsDate = v.mainsDate; st.dailyTarget = clamp(num(v.dailyTarget,8),0.5,18); st.gsCutoff = clamp(num(v.gsCutoff,95),0,200); applyTheme(); Store.mark('core'); toast('Settings saved'); return true; }});
+}
+
+/* ---------- events ---------- */
+const A = {
+  tab: el => { UI.tab = el.dataset.tab; render(); window.scrollTo({top:0}); },
+  settings: () => openSettings(),
+  'dismiss-first': () => { UI.firstRun = false; Store.mark('core'); Store.mark('days'); seedNotesIfNeeded(); render(); },
+  import: () => { $('#import-file').click(); },
+  export: () => exportBackup(),
+  'reset-progress': () => confirmBox('Reset all syllabus progress?', 'Every GS and optional topic goes back to Unread with 0 PYQs solved. Topics, notes, mocks and your study log stay.', 'Reset to 0%', () => { S.core.syllabus.forEach(t=>{t.stage=0;t.pyqDone=0;}); Object.values(S.core.optionalData).forEach(l=>l.forEach(t=>{t.stage=0;t.pyqDone=0;})); Store.mark('core'); render(); toast('Progress reset to 0%'); }),
+  'task-toggle': el => { const t = S.days.tasks.find(x=>x.id===el.dataset.id); if(!t) return; t.done = !t.done; t.doneAt = t.done ? today() : null; Store.mark('days'); render(); },
+  'task-edit': el => editTask(el.dataset.id),
+  'task-del': el => { S.days.tasks = S.days.tasks.filter(x=>x.id!==el.dataset.id); Store.mark('days'); render(); toast('Target deleted'); },
+  'task-today': el => { const t = S.days.tasks.find(x=>x.id===el.dataset.id); if(t){ t.date = today(); Store.mark('days'); render(); } },
+  'carry-all': () => { const k = today(); S.days.tasks.forEach(t => { if(t.date < k && !t.done) t.date = k; }); Store.mark('days'); render(); },
+  'routine-toggle': el => { const L = dayLog(today(), true); L.routine = L.routine || []; const i = L.routine.indexOf(el.dataset.id); if(i>=0) L.routine.splice(i,1); else L.routine.push(el.dataset.id); Store.mark('days'); render(); },
+  'routine-edit': el => editRoutine(el.dataset.id),
+  'routine-del': el => { S.days.routine = S.days.routine.filter(x=>x.id!==el.dataset.id); Store.mark('days'); render(); },
+  'timer-go': () => { if(Timer.running){ Timer.remaining = Math.max(0, Math.round((Timer.endAt-Date.now())/1000)); Timer.running = false; clearInterval(Timer.iv); } else { Timer.endAt = Date.now() + Timer.remaining*1000; Timer.running = true; clearInterval(Timer.iv); Timer.iv = setInterval(timerTick, 1000); try{ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } paintTimer(); },
+  'timer-stop': () => { const rem = Timer.running ? Math.max(0, Math.round((Timer.endAt-Date.now())/1000)) : Timer.remaining; const done = (Timer.total - rem)/60; Timer.running = false; clearInterval(Timer.iv); Timer.remaining = Timer.total; if(done >= 1){ logMinutes(Math.round(done), true); toast(hm(done)+' added to today'); } else toast('Less than a minute, nothing logged'); paintTimer(); },
+  'timer-reset': () => { Timer.running = false; clearInterval(Timer.iv); Timer.remaining = Timer.total; paintTimer(); },
+  'timer-preset': el => { const m = int(el.dataset.min,50); Timer.running = false; clearInterval(Timer.iv); Timer.total = Timer.remaining = m*60; render(); },
+  'log-day': el => editDay(el.dataset.day),
+  stage: el => { const t = findTopic(el.dataset.kind, el.dataset.id); if(!t) return; const n = int(el.dataset.n); const ns = t.stage === n ? n-1 : n; if(ns > t.stage) touch(t); t.stage = ns; Store.mark('core'); render(); if(ns===4) toast('Exam ready: '+t.topic.slice(0,48)+(t.topic.length>48?'…':'')); },
+  pyq: el => { const t = findTopic(el.dataset.kind, el.dataset.id); if(!t) return; const d = int(el.dataset.d); t.pyqDone = Math.max(0, t.pyqDone + d); if(t.pyqDone > t.pyqCount) t.pyqCount = t.pyqDone; if(d>0) touch(t); Store.mark('core'); render(); },
+  'topic-edit': el => editTopic(el.dataset.kind, el.dataset.id),
+  'topic-del': el => { const t = findTopic(el.dataset.kind, el.dataset.id); if(!t) return; confirmBox('Delete this topic?', esc(t.topic), 'Delete', () => { const l = topicList(el.dataset.kind); l.splice(l.indexOf(t),1); Store.mark('core'); render(); }); },
+  paper: el => { UI.paper = UI.paper === el.dataset.p ? 'ALL' : el.dataset.p; render(); },
+  optpaper: el => { UI.optPaper = UI.optPaper === el.dataset.p ? 'ALL' : el.dataset.p; render(); },
+  'thinker-edit': el => editThinker(el.dataset.id),
+  'thinker-del': el => { S.core.thinkers = S.core.thinkers.filter(x=>x.id!==el.dataset.id); Store.mark('core'); render(); toast('Thinker removed'); },
+  'note-new': () => noteForm(null),
+  'note-edit': el => noteForm(S.notes.find(x=>x.id===el.dataset.id)),
+  'note-del': el => { const n = S.notes.find(x=>x.id===el.dataset.id); if(n) confirmBox('Delete this note?', esc(n.title)+(n.file&&n.file.assetId?' Its stored file is deleted too.':''), 'Delete', () => deleteNote(n.id)); },
+  'note-more': el => { UI.expanded[el.dataset.id] = !UI.expanded[el.dataset.id]; render(); },
+  notecat: el => { UI.noteCat = el.dataset.c; render(); },
+  upload: () => $('#upload-file').click(),
+  'mock-type': el => { UI.mock.type = el.dataset.t; render(); },
+  'chart-type': el => { UI.chartType = el.dataset.t; render(); },
+  'mock-edit': el => editMock(el.dataset.id),
+  'mock-del': el => { S.core.mocks = S.core.mocks.filter(x=>x.id!==el.dataset.id); Store.mark('core'); render(); toast('Mock removed'); },
+  'modal-close': () => closeModal(),
+  'modal-close-scrim': (el, e) => { if(e.target === el) closeModal(); },
+  'modal-del': () => { const c = modalCfg; closeModal(); if(c && c.onDel){ c.onDel(); render(); } }
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if(!el) return;
+  const fn = A[el.dataset.act]; if(!fn) return;
+  if(el.dataset.act !== 'modal-close-scrim') e.preventDefault();
+  if(!S.core && !['settings'].includes(el.dataset.act)) return;
+  fn(el, e);
+});
+const F = {
+  'task-add': (f, d) => { const title = String(d.get('title')||'').trim(); if(!title) return; UI.lastTag = d.get('tag'); S.days.tasks.unshift({id:uid('t'), title, tag:d.get('tag'), done:false, date:addDays(today(), int(d.get('when'))), doneAt:null}); Store.mark('days'); render(); const i = $('#task-title'); if(i){ i.value=''; i.focus(); } toast(int(d.get('when'))?'Added to tomorrow':'Target added'); },
+  'routine-add': (f, d) => { const title = String(d.get('title')||'').trim(); if(!title) return; S.days.routine.push({id:uid('r'), title, tag:d.get('tag')}); Store.mark('days'); render(); },
+  'manual-time': (f, d) => { const m = clamp(int(d.get('min')),0,720); if(m>0){ logMinutes(m, false); toast(hm(m)+' added to today'); render(); } },
+  'topic-add': (f, d) => { const kind = f.dataset.kind; const t = normTopic({paper:d.get('paper'), subject:d.get('subject'), section:d.get('section'), topic:String(d.get('topic')||'').trim(), pyqCount:d.get('pyqCount')||0}, kind); if(!t.topic) return; topicList(kind).push(t); Store.mark('core'); render(); toast('Topic added at 0%'); },
+  'thinker-add': (f, d) => { S.core.thinkers.unshift({id:uid('th'), scholar:String(d.get('scholar')).trim(), quote:String(d.get('quote')).trim(), paper:d.get('paper')}); Store.mark('core'); render(); toast('Saved to thinker bank'); },
+  'mock-add': (f, d) => { const m = normMock({id:uid('m'), name:UI.mock.name.trim()||'Mock test', type:UI.mock.type, correct:UI.mock.correct, incorrect:UI.mock.incorrect, date:d.get('date')}); S.core.mocks.push(m); UI.mock.name = ''; UI.chartType = m.type; Store.mark('core'); render(); toast('Mock saved: '+net(m).toFixed(2)); },
+  modal: (f, d) => { if(!modalCfg) return; const v = {}; d.forEach((val,key) => v[key] = String(val)); const c = modalCfg; if(c.onSave(v) !== false){ closeModal(); render(); } }
+};
+document.addEventListener('submit', e => { const f = e.target; if(!f.dataset || !f.dataset.form) return; e.preventDefault(); if(!S.core) return; F[f.dataset.form](f, new FormData(f)); });
+let jT;
+document.addEventListener('input', e => {
+  const el = e.target, k = el.dataset && el.dataset.input; if(!k || !S.core) return;
+  if(k === 'journal'){ dayLog(today(), true).note = el.value; clearTimeout(jT); jT = setTimeout(() => Store.mark('days', true), 700); Store.dirty.days = true; paintStatus(); return; }
+  if(k === 'q'){ UI.q = el.value; render(); return; }
+  if(k === 'optQ'){ UI.optQ = el.value; render(); return; }
+  if(k === 'noteQ'){ UI.noteQ = el.value; render(); return; }
+  if(k === 'upSub'){ UI.upSub = el.value; return; }
+  if(k.startsWith('mock.')){ UI.mock[k.slice(5)] = el.value; if(k !== 'mock.name'){ const calcHolder = document.createElement('div'); calcHolder.innerHTML = vMocks(); const nc = calcHolder.querySelector('#calc'); const oc = $('#calc'); if(nc && oc) oc.replaceWith(nc); } return; }
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if(el.id === 'import-file'){ const f = el.files && el.files[0]; el.value = ''; if(f){ closeModal(); importBackup(f); } return; }
+  if(el.id === 'upload-file'){ const fs = Array.from(el.files||[]); el.value = ''; processFiles(fs); return; }
+  const k = el.dataset && el.dataset.input; if(!k || !S.core) return;
+  if(k === 'optional'){ S.core.settings.selectedOptional = el.value; UI.optPaper = 'ALL'; Store.mark('core'); render(); }
+  if(k === 'upCat'){ UI.upCat = el.value; render(); }
+});
+['dragover','dragenter'].forEach(ev => document.addEventListener(ev, e => { const d = e.target.closest && e.target.closest('#drop'); if(d){ e.preventDefault(); d.classList.add('on'); } }));
+document.addEventListener('dragleave', e => { const d = e.target.closest && e.target.closest('#drop'); if(d) d.classList.remove('on'); });
+document.addEventListener('drop', e => { const d = e.target.closest && e.target.closest('#drop'); if(d){ e.preventDefault(); d.classList.remove('on'); processFiles(e.dataTransfer && e.dataTransfer.files); } });
+
+// first real edit in a fresh cloud vault also stores the starter notes
+const origMark = Store.mark.bind(Store);
+Store.mark = function(which, now){ if(UI.seedNotes && S.mode === 'cloud' && !UI.firstRun) seedNotesIfNeeded(); if(UI.firstRun && S.mode !== 'loading'){ UI.firstRun = false; seedNotesIfNeeded(); } origMark(which, now); };
+
+// roll over at midnight
+let lastDay = today();
+setInterval(() => { if(today() !== lastDay){ lastDay = today(); if(S.core) render(); } }, 60000);
+
+boot();
+})();
+</script>
+
+</body>
+</html>
